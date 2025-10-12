@@ -28,6 +28,8 @@ export class AnimalController {
   static async list(req: Request, res: Response) {
     try {
       // Paginação e ordenação
+      const session = req.session;
+
       const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
       const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string, 10) : 10;
       const sortBy = (req.query.sortBy as string) || 'entry_date';
@@ -54,8 +56,8 @@ export class AnimalController {
         filters,
       };
 
-      const result = await listAnimals(animalRepo)(
-        pagination
+      const result = await listAnimals(animalRepo, session)(
+        pagination,
       );
 
       res.status(200).json(result);

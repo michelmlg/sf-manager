@@ -100,7 +100,7 @@ onMounted(() => {
       </div> -->
 
       <div class="text-center">
-      <template v-if="!showAll">
+      <template v-if="!showAll && animals.length > 3">
         <!-- Estado fechado -->
         <button @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
           Ver Mais <ChevronDown size="20" />
@@ -110,7 +110,7 @@ onMounted(() => {
       <template v-else>
         <!-- Estado aberto parcial -->
         <div class="flex justify-center gap-4">
-          <button @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
+          <button v-if="animals.length > 3" @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
             Ver Menos <ChevronUp size="20" />
           </button>
 
