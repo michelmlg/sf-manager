@@ -83,24 +83,17 @@ export class SequelizeAnimalRepository implements IAnimalRepository {
     return deleted > 0;
   }
 
-  // async findPaginated(options: PaginationOptions): Promise<PaginatedResult<any>> {
-  //   const result = await findPaginated(AnimalModel, {
-  //     page: options.page,
-  //     pageSize: options.pageSize,
-  //     sortBy: options.sortBy,
-  //     sortOrder: options.sortOrder,
-  //     filters: {
-  //       ...options.filters,
-  //       includeAssociations: ['species', 'breed'],
-  //     },
-  //   });
+  async markAsAdopted(id: string): Promise<boolean> {
+      const [updatedRowsCount] = await AnimalModel.update(
+          { 
+              status: "Adotado",
+              updatedAt: new Date()
+          },
+          { where: { id } }
+      );
+      return updatedRowsCount > 0;
+  }
 
-  //   // opcionalmente mapeie para DTOs
-  //   return {
-  //     ...result,
-  //     items: result.items.map(a => this.mapToEntity(a).props),
-  //   };
-  // }
 
   async findPaginated(options: PaginationOptions): Promise<PaginatedResult<any>> {
     const result = await findPaginated(AnimalModel, {

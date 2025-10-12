@@ -7,6 +7,7 @@ export interface IAnimalRepository {
   create(data: Omit<AnimalProps, 'id'>): Promise<Animal>;
   update(id: string, data: Partial<Omit<AnimalProps, 'id'>>): Promise<AnimalProps | null>;
   delete(id: string): Promise<boolean>;
+  markAsAdopted(id: string): Promise<boolean>;
   findPaginated(pagination: PaginationOptions): Promise<PaginatedResult<Animal>>;
 
 }
