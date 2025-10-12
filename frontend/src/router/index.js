@@ -16,6 +16,11 @@ const router = createRouter({
                     component: () => import('../views/Landing/home/HomePage.vue'),
                 },
                 {
+                    path: '/animals',
+                    name: 'animals',
+                    component: () => import('../views/Landing/animals/AnimalsPage.vue'),
+                },
+                {
                     path:'/o-que-fazemos',
                     name:'o-que-fazemos',
                     component: () => import('../views/Landing/o-que-fazemos/AboutPage.vue'),

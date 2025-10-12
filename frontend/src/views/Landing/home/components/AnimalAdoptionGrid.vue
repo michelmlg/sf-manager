@@ -288,7 +288,7 @@ onMounted(() => {
             Ver Menos <ChevronUp size="20" />
           </button>
 
-          <router-link to="/todos-animais" class="inline-flex items-center gap-2 btn-primary">
+          <router-link to="/animals" class="inline-flex items-center gap-2 btn-primary">
             Ver Todos Animais
           </router-link>
         </div>
