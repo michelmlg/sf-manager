@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const props = defineProps({
   petId: {
@@ -67,7 +68,9 @@ onMounted(fetchImages);
 
 <template>
   <div :class="containerClass">
-    <div v-if="loading" class="text-gray-500">Carregando...</div>
+    <div v-if="loading" class="flex justify-content-center">
+      <LoadingSpinner/>
+    </div>
     <div v-else-if="error" class="text-red-500">{{ error }}</div>
     <div v-else-if="images.length === 0" class="text-gray-500">Nenhuma imagem pública</div>
     <div v-else class="w-full h-full relative">

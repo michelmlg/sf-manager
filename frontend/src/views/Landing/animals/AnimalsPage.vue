@@ -99,7 +99,7 @@ onMounted(fetchAnimals)
 <template>
   <section class="py-20 bg-gradient-to-br from-ong-background to-white">
     <div class="container mx-auto px-4 min-h-[100vh]">
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb">
         <h2 class="text-ong-text mb-6">Animais Disponíveis para Adoção</h2>
         <p class="text-lg text-ong-text/80">
           Conheça nossos amigos especiais que estão esperando por uma família.

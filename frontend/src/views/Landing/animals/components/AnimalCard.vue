@@ -42,6 +42,9 @@ function calculateAnimalAge(dataNasc) {
 function goToAdoptionForm() {
   router.push(`/formulario-de-adocao/${props.animal.id}`)
 }
+function goToAnimalPage() {
+  router.push(`/animal/${props.animal.id}`)
+}
 
 const isLarge = computed(() => props.size === 'large')
 
@@ -122,7 +125,7 @@ const buttonClass = computed(() =>
       <!-- Botão -->
       <button
         v-if="showButton"
-        @click.stop="goToAdoptionForm"
+        @click.stop="goToAnimalPage"
         class="w-full btn-primary hover:bg-ong-accent transition-colors duration-300 rounded-lg font-medium"
         :class="buttonClass"
       >

@@ -24,10 +24,14 @@ export class SequelizeAnimalRepository implements IAnimalRepository {
     });
   }
 
-
-  async findById(id: string): Promise<Animal | null> {
-    const animal = await AnimalModel.findByPk(id);
-    return animal ? this.mapToEntity(animal) : null;
+  async findById(id: string): Promise<AnimalProps | null> {
+    const animal = await AnimalModel.findByPk(id, {
+      include: [
+        { association: 'species' },
+        { association: 'breed' }
+      ]
+    });
+    return animal ? this.mapToEntity(animal).props : null;
   }
 
   async searchByName(name: string, pagination?: PaginationOptions): Promise<PaginatedResult<Animal>> {
