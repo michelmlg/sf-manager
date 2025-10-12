@@ -2,7 +2,8 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/Pagination.vue'
-import PetMediaCarousel from '@/views/Staff/pets/components/PetMediaCarousel.vue'
+import AnimalCard from '@/views/Landing/animals/components/AnimalCard.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const router = useRouter()
 
@@ -19,16 +20,7 @@ const speciesFilter = ref('all');
 const dateFrom = ref(null);
 const dateTo = ref(null);
 
-// Função utilitária
-function calculateAnimalAge(dataNasc) {
-  if (!dataNasc) return 'Idade desconhecida'
-  const hoje = new Date()
-  const nasc = new Date(dataNasc)
-  let anos = hoje.getFullYear() - nasc.getFullYear()
-  let meses = hoje.getMonth() - nasc.getMonth()
-  if (meses < 0 || (meses === 0 && hoje.getDate() < nasc.getDate())) anos--
-  return anos >= 1 ? `${anos} ano${anos > 1 ? 's' : ''}` : 'Menos de 1 ano'
-}
+let searchTimeout = null;
 
 // Busca paginada
 async function fetchAnimals() {
@@ -85,10 +77,21 @@ function goToAdoptionForm(animalId) {
 }
 
 watch(
-  [page, pageSize, search, genderFilter, speciesFilter, dateFrom, dateTo],
+  [page, pageSize, genderFilter, speciesFilter, dateFrom, dateTo],
   fetchAnimals,
     { immediate: true, deep: true }
 );
+
+watch(
+  () => search.value,
+  () => {
+    clearTimeout(searchTimeout)
+    searchTimeout = setTimeout(() => {
+      page.value = 1
+      fetchAnimals()
+    }, 600) // delay de 600ms (ajustável)
+  }
+)
 
 onMounted(fetchAnimals)
 </script>
@@ -154,59 +157,16 @@ onMounted(fetchAnimals)
 
       <!-- Grid de animais -->
       <div v-if="!loading" class="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-        <div
+        <AnimalCard
           v-for="animal in animals"
           :key="animal.id"
-          class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover cursor-pointer group"
-        >
-          <PetMediaCarousel :pet-id="animal.id" :no-border-bottom="true" />
-
-          <div class="p-6">
-            <div class="flex justify-between items-start mb-3">
-              <div>
-                <h4 class="text-ong-text mb-1">{{ animal.name }}</h4>
-                <p class="text-ong-text/70 text-sm">
-                  {{ animal.species?.name }} • {{ animal.breed?.name }}
-                </p>
-              </div>
-
-              <span
-                class="text-ong-primary font-medium text-sm bg-ong-secondary/30 px-3 py-1 rounded-full"
-              >
-                {{ calculateAnimalAge(animal.birthDate) }}
-              </span>
-            </div>
-
-            <p class="text-ong-text/80 text-sm mb-4 line-clamp-2">
-              {{ animal.notes || 'Sem descrição.' }}
-            </p>
-
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span
-                v-if="animal.status === 'Disponível'"
-                class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full"
-              >
-                Disponível
-              </span>
-              <span
-                v-if="animal.isCastrated"
-                class="text-xs bg-ong-primary/20 text-ong-primary px-2 py-1 rounded-full"
-              >
-                Castrado
-              </span>
-            </div>
-
-            <button
-              @click.stop="goToAdoptionForm(animal.id)"
-              class="w-full btn-primary hover:bg-ong-accent transition-colors duration-300"
-            >
-              Quero Adotar
-            </button>
-          </div>
-        </div>
+          :animal="animal"
+          size="small"
+        />
       </div>
 
-      <div v-else class="text-center text-ong-text/60">Carregando...</div>
+      <LoadingSpinner v-else/>
+
     </div>
   </section>
 </template>
