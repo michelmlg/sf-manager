@@ -72,7 +72,7 @@ onMounted(fetchImages);
       <LoadingSpinner/>
     </div>
     <div v-else-if="error" class="text-red-500">{{ error }}</div>
-    <div v-else-if="images.length === 0" class="text-gray-500">Nenhuma imagem pública</div>
+    <div v-else-if="images.length === 0" class="text-gray-500 text-sm">Nenhuma imagem disponível</div>
     <div v-else class="w-full h-full relative">
       <img
         :src="images[currentIndex]"

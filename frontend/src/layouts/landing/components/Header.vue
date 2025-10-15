@@ -25,8 +25,7 @@
 
         <!-- Botões CTA (Desktop) -->
         <div class="hidden md:flex space-x-4">
-          <button class="btn-secondary">Voluntário</button>
-          <button class="btn-primary">Doar Agora</button>
+          <RouterLink to="/animals" class="btn-primary">Adotar agora</RouterLink>
         </div>
 
         <div class="hidden md:flex">
@@ -56,8 +55,7 @@
             {{ item.name }}
           </RouterLink>
           <div class="flex flex-col space-y-2 pt-4">
-            <button class="btn-secondary">Voluntário</button>
-            <button class="btn-primary">Doar Agora</button>
+            <RouterLink to="/animals" class="btn-primary">Adotar agora</RouterLink>
           </div>
         </nav>
       </div>
@@ -68,7 +66,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Menu, X, Heart, CircleUserRound  } from 'lucide-vue-next'
+import { Menu, X, Heart, CircleUserRound, Router  } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 
 const isMenuOpen = ref(false)

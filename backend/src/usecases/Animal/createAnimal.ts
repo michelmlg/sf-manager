@@ -6,8 +6,22 @@ type CreateAnimalInput = Omit<AnimalProps, 'id'> & { id?: string };
 export function createAnimal(animalRepository: IAnimalRepository) {
   return async (data: CreateAnimalInput): Promise<AnimalProps> => {
 
-    if (!data.name || !data.speciesId || !data.gender || !data.size) {
-      throw new Error('Faltando nome, espécie, gênero ou tamanho.');
+    const requiredFields: (keyof CreateAnimalInput)[] = [
+      'name',
+      'speciesId',
+      'breedId',
+      'gender',
+      'size',
+      'status',
+      'entryDate',
+    ];
+
+    const missingFields = requiredFields.filter(field => 
+      data[field] === null || data[field] === undefined || data[field] === ''
+    );
+
+    if (missingFields.length > 0) {
+      throw new Error(`Campos obrigatórios faltando: ${missingFields.join(', ')}.`);
     }
 
     const animalData = {

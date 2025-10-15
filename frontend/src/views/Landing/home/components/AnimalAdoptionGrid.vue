@@ -12,7 +12,7 @@ const favorites = ref([])
 const loading = ref(false);
 const total = ref(0);
 const page = ref(1);
-const pageSize = ref(10);
+const pageSize = ref(6);
 
 const animals = ref([]);
 

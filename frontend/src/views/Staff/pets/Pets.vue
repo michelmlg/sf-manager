@@ -64,6 +64,9 @@ async function fetchAnimals() {
       };
     }
 
+    filters.sort = [{ field: "entryDate", direction: "desc" }, { field: "name", direction: "asc" }];
+
+
     if (Object.keys(dateFilters).length) filters.dateFilters = dateFilters;
 
     const params = new URLSearchParams({
@@ -85,7 +88,7 @@ async function fetchAnimals() {
       id: animal.id,
       name: animal.name,
       species: animal.species,
-      breed: animal.breed,
+      breed: animal.breed || null,
       age: animal.birthDate? calculateAnimalAge(animal.birthDate) : null,
       status: animal.status,
       vaccinated: animal.isVaccinated ?? false,
@@ -274,8 +277,8 @@ onMounted(() => {
           >
             <td class="p-3 font-medium text-foreground">{{ animal.name }}</td>
             <td class="p-3">
-              <div>{{ animal.species.name }}</div>
-              <div class="text-xs text-muted-foreground">{{ animal.breed.name }}</div>
+              <div>{{ animal.species && animal.species.name ?  animal.species.name : ''}}</div>
+              <div class="text-xs text-muted-foreground">{{ animal.breed && animal.breed.name ? animal.breed.name : '' }}</div>
             </td>
             <td class="p-3">{{ animal.age ?? 'Não informada'}}</td>
             <td class="p-3">{{ animal.gender == "M" ? "Macho" : "Fêmea" }}</td>

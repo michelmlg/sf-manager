@@ -3,6 +3,7 @@ import { ref, reactive, onMounted, watch } from 'vue';
 import { X } from 'lucide-vue-next';
 import { v4 as uuidv4 } from 'uuid';
 import SearchableSelect from '@/components/SearchableSelect.vue';
+import { showToast } from '@/utils/uiAlerts/toast'
 
 const props = defineProps({
   isOpen: Boolean
@@ -90,8 +91,7 @@ async function createAnimal() {
   isSubmitting.value = true;
 
   try {
-    console.log("➡️ Iniciando criação de animal...");
-    console.log("📦 Dados enviados:", {
+    console.log("Dados enviados:", {
       name: editableAnimal.name,
       speciesId: editableAnimal.speciesId,
       breedId: editableAnimal.breedId,
@@ -124,22 +124,22 @@ async function createAnimal() {
       })
     });
 
-    console.log("📡 Resposta do backend (create animal):", res);
+    console.log("Resposta do backend (create animal):", res);
 
     if (!res.ok) {
-      console.error("❌ Erro ao criar animal:", res.status, res.statusText);
+      console.error("Erro ao criar animal:", res.status, res.statusText);
       throw new Error('Erro ao criar animal');
     }
 
     const createdAnimal = await res.json();
-    console.log("✅ Animal criado com sucesso:", createdAnimal);
+    console.log("Animal criado com sucesso:", createdAnimal);
 
     const animalId = createdAnimal.animalProps.id;
-    console.log("🆔 ID do animal criado:", animalId);
+    console.log("ID do animal criado:", animalId);
 
     // Se houver imagem, enviar vinculada ao animalId retornado
     if (editableAnimal.imageFile) {
-      console.log("📸 Enviando imagem vinculada ao animal:", animalId);
+      console.log("Enviando imagem vinculada ao animal:", animalId);
 
       const formData = new FormData();
       formData.append('type', 'image');
@@ -152,30 +152,30 @@ async function createAnimal() {
         body: formData
       });
 
-      console.log("📡 Resposta do backend (upload media):", mediaRes);
+      console.log("Resposta do backend (upload media):", mediaRes);
 
       if (!mediaRes.ok) {
-        console.error("❌ Erro ao enviar imagem:", mediaRes.status, mediaRes.statusText);
+        console.error("Erro ao enviar imagem:", mediaRes.status, mediaRes.statusText);
         throw new Error('Erro ao enviar imagem');
       }
 
       const uploadedMedia = await mediaRes.json();
-      console.log("✅ Imagem enviada com sucesso:", uploadedMedia);
+      console.log("Imagem enviada com sucesso:", uploadedMedia);
     } else {
-      console.log("ℹ️ Nenhuma imagem foi selecionada para upload.");
+      console.log("ℹNenhuma imagem foi selecionada para upload.");
     }
 
     emit('created', animalId);
-    console.log("📢 Evento 'created' emitido com ID:", animalId);
+    console.log("Evento 'created' emitido com ID:", animalId);
 
     closeModal();
-    console.log("✅ Modal fechado.");
+    console.log("Modal fechado.");
   } catch (err) {
-    console.error("💥 Erro capturado no createAnimal:", err);
-    alert('Erro ao criar animal');
+    console.error("Erro capturado no createAnimal:", err);
+    showToast({ icon: 'error', title: 'Erro ao criar o animal!' })
   } finally {
     isSubmitting.value = false;
-    console.log("🔄 Finalizando createAnimal, isSubmitting = false");
+    console.log("Finalizando createAnimal, isSubmitting = false");
   }
 }
 
