@@ -369,10 +369,10 @@ async function reviewRequest(action) {
   isReviewing.value = true;
   
   try {
-    console.log('🔄 Iniciando revisão:', { action, requestId: selectedRequest.value.id });
+    console.log('Iniciando revisão:', { action, requestId: selectedRequest.value.id });
     
     const response = await fetch(`/api/adoption-request/${selectedRequest.value.id}/review`, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action,
@@ -380,16 +380,16 @@ async function reviewRequest(action) {
       })
     });
 
-    console.log('📨 Resposta da revisão:', response.status, response.statusText);
+    console.log('Resposta da revisão:', response.status, response.statusText);
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.log('❌ Erro na revisão:', errorData);
+      console.log('Erro na revisão:', errorData);
       throw new Error(errorData.error || 'Erro ao processar revisão');
     }
 
     const result = await response.json();
-    console.log('✅ Revisão bem-sucedida:', result);
+    console.log('Revisão bem-sucedida:', result);
     
     // Update the request in the list
     const index = adoptionRequests.value.findIndex(r => r.id === selectedRequest.value.id);

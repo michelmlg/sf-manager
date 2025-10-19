@@ -51,7 +51,7 @@
       @change-view="val => { view = val }"
       @change-filter="val => { filter = val; page = 1 }"
       @update:page="val => { page = val }"
-      @update:pageSize="val => { perPage = val; page = 1 }"
+      @update:pageSize="val => { pageSize = val; page = 1 }"
       @update:search="val => {search = val}"
     />
 

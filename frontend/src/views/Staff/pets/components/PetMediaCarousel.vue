@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const props = defineProps({
   petId: {
@@ -83,18 +84,20 @@ onMounted(fetchImages);
       <!-- Botão Prev -->
       <button
         @click="prev"
-        class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition"
+        class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 text-ong-text rounded-full p-1.5 hover:bg-ong-background transition flex items-center justify-center shadow"
       >
-        ‹
+        <ChevronLeft class="w-4 h-4" />
       </button>
 
       <!-- Botão Next -->
       <button
         @click="next"
-        class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white rounded-full p-2 hover:bg-black/70 transition"
+        class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 text-ong-text rounded-full p-1.5 hover:bg-ong-background transition flex items-center justify-center shadow"
       >
-        ›
+        <ChevronRight class="w-4 h-4" />
       </button>
+
+
 
       <!-- Indicadores -->
       <div class="absolute bottom-2 w-full flex justify-center gap-1">
