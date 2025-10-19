@@ -31,6 +31,10 @@ const props = defineProps({
     type: String,
     default: 'danger',
   },
+  size: {
+    type: String,
+    default: 'md', // sm | md | lg
+  }
 });
 
 const slots = useSlots();
@@ -39,10 +43,24 @@ const hasContent = computed(() => {
   return !!props.text || !!slots.default;
 });
 
+
+const sizeClasses = computed(() => {
+  switch(props.size) {
+    case 'sm':
+      return 'px-2 py-1 text-xs gap-1 rounded-sm';
+    case 'lg':
+      return 'px-5 py-3 text-base gap-2 rounded-lg';
+    case 'md':
+      return 'px-3 py-1.5 text-sm gap-1 rounded-md';
+    default:
+      return 'px-3 py-1.5 text-sm gap-1 rounded-md';
+  }
+});
+
 const baseStyle = computed(() => {
   return hasContent.value
-    ? 'px-3 py-1.5 rounded-md text-sm gap-1'
-    : 'w-8 h-8 p-1 rounded-md'; // Ícone apenas → quadrado
+    ? sizeClasses.value
+    : 'w-8 h-8 p-1 rounded-md'; // ícone apenas
 });
 
 const variantClasses = computed(() => {
