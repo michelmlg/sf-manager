@@ -26,7 +26,7 @@ async function verifySession() {
     if (response.ok) {
       const data = await response.json();
       if (data.user) {
-        router.push({ name: 'staff' }); // redireciona para o painel administrativo
+        router.push({ name: 'PetPage' }); // redireciona para o painel administrativo
       }
     }
   } catch (error) {
