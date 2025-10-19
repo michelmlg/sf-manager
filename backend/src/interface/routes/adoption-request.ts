@@ -11,7 +11,8 @@ router.post('/', AdoptionRequestController.create);
 // Protected routes for staff management
 router.get('/', requireAuth(authServiceSingleton), AdoptionRequestController.list);
 router.get('/:id', requireAuth(authServiceSingleton), AdoptionRequestController.getById);
-router.patch('/:id/review', requireAuth(authServiceSingleton), AdoptionRequestController.review);
+router.get('/animal/:petId', requireAuth(authServiceSingleton), AdoptionRequestController.getByPetId);
+router.put('/:id/review', requireAuth(authServiceSingleton), AdoptionRequestController.review);
 router.delete('/:id', requireAuth(authServiceSingleton), AdoptionRequestController.delete);
 
 export default router; 

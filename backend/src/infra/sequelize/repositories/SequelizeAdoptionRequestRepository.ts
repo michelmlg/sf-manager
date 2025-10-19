@@ -2,9 +2,17 @@ import { IAdoptionRequestRepository } from '@domain/repositories/IAdoptionReques
 import { AdoptionRequest, AdoptionRequestProps } from '@domain/entities/AdoptionRequest';
 import { AdoptionRequestModel } from '@infra/sequelize/models/AdoptionRequest.model';
 import { AnimalModel } from '@infra/sequelize/models/Animal.model';
+import { findPaginated } from '@infra/sequelize/utils/findPaginated';
 import { UserModel } from '@infra/sequelize/models/User.model';
+import { PaginationOptions, PaginatedResult } from '@types/Pagination';
 
 export class SequelizeAdoptionRequestRepository implements IAdoptionRequestRepository {
+
+    private mapToEntity(model: AdoptionRequestModel): AdoptionRequest {
+        return new AdoptionRequest(model.dataValues as any);
+    }
+
+
     async create(adoptionRequest: AdoptionRequest): Promise<AdoptionRequest> {
         const created = await AdoptionRequestModel.create(adoptionRequest.toPersistence());
         return new AdoptionRequest(created.dataValues as AdoptionRequestProps);
@@ -48,24 +56,27 @@ export class SequelizeAdoptionRequestRepository implements IAdoptionRequestRepos
         return adoptionRequests.map(req => new AdoptionRequest(req.dataValues as AdoptionRequestProps));
     }
 
-    async findByAnimalId(animalId: string): Promise<AdoptionRequest[]> {
-        const adoptionRequests = await AdoptionRequestModel.findAll({
-            where: { animalId },
-            include: [
-                {
-                    model: AnimalModel,
-                    as: 'animal'
-                },
-                {
-                    model: UserModel,
-                    as: 'reviewer',
-                    attributes: ['id', 'name', 'email']
-                }
-            ],
-            order: [['submittedAt', 'DESC']]
+    async findByAnimalId(
+        animalId: string,
+        pagination: PaginationOptions
+    ): Promise<PaginatedResult<AdoptionRequestProps>> {
+
+        const result = await findPaginated(AdoptionRequestModel, {
+            page: pagination.page,
+            pageSize: pagination.pageSize,
+            filters: {
+                fieldFilters: { animalId }, 
+                includeAssociations: ['animal'],
+                sort: [
+                { field: pagination.sortBy || 'submittedAt', direction: pagination.sortOrder || 'desc' }
+                ],
+            },
         });
-        
-        return adoptionRequests.map(req => new AdoptionRequest(req.dataValues as AdoptionRequestProps));
+
+        return {
+        ...result,
+        items: result.items.map(req => this.mapToEntity(req).props),
+        };
     }
 
     async findByStatus(status: string): Promise<AdoptionRequest[]> {
