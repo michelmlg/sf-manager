@@ -251,7 +251,6 @@ watch([page, pageSize, filter, search], () => {
       @open-modal="openModal"
     />
 
-      <p v-else>Nenhuma mídia encontrada.</p>
     </template>
 
     <!-- Modal -->
