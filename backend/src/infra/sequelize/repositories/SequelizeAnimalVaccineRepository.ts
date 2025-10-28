@@ -3,7 +3,7 @@ import { AnimalVaccine } from '@infra/sequelize/models/AnimalVaccine.model';
 import { Vaccine } from '@infra/sequelize/models/Vaccine.model';
 import { AnimalVaccineProps } from '@domain/entities/AnimalVaccine';
 import { IAnimalVaccineRepository } from '@domain/repositories/IAnimalVaccineRepository';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export class SequelizeAnimalVaccineRepository implements IAnimalVaccineRepository {
   async findById(id: string): Promise<AnimalVaccineProps | null> {

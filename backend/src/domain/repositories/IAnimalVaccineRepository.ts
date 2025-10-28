@@ -1,5 +1,5 @@
 import { AnimalVaccineProps } from '@domain/entities/AnimalVaccine';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IAnimalVaccineRepository {
   findById(id: string): Promise<AnimalVaccineProps | null>;

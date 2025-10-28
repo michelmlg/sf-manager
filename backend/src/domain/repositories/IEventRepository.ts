@@ -1,5 +1,5 @@
 import { Event, EventProps } from '@domain/entities/Event';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IEventRepository {
   create(name: string, description: string, place: string, start_at: Date, end_at: Date): Promise<Event>;

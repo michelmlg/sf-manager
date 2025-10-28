@@ -1,5 +1,5 @@
 import { SpeciesProps } from '@domain/entities/Species';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface ISpeciesRepository {
   findById(id: number): Promise<SpeciesProps | null>;

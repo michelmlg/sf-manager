@@ -1,5 +1,5 @@
 import { AnimalMediaProps } from '@domain/entities/AnimalMedia';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IAnimalMediaRepository {
   findById(id: string): Promise<AnimalMediaProps | null>;

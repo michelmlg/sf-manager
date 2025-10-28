@@ -1,6 +1,6 @@
 import { Breed } from '@infra/sequelize/models/Breed.model';
 import { BreedProps } from '@domain/entities/Breed';
-import { PaginatedResult, PaginationOptions } from '@types/Pagination';
+import { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 import { IBreedRepository} from '@domain/repositories/IBreedRepository';
 import { Op } from 'sequelize';
 

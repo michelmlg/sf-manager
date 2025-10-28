@@ -1,5 +1,5 @@
 import { IAnimalRepository } from '@domain/repositories/IAnimalRepository';
-import { PaginationOptions } from '@types/Pagination';
+import { PaginationOptions } from '@shared-types/Pagination';
 import { authServiceSingleton } from '@dependencies/singletons';
 
 export function listAnimals(

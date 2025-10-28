@@ -4,7 +4,7 @@ import { AdoptionRequestModel } from '@infra/sequelize/models/AdoptionRequest.mo
 import { AnimalModel } from '@infra/sequelize/models/Animal.model';
 import { findPaginated } from '@infra/sequelize/utils/findPaginated';
 import { UserModel } from '@infra/sequelize/models/User.model';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export class SequelizeAdoptionRequestRepository implements IAdoptionRequestRepository {
 

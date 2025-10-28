@@ -1,5 +1,5 @@
 import { IAnimalMediaRepository } from '@domain/repositories/IAnimalMediaRepository';
-import { PaginationOptions } from '@types/Pagination';
+import { PaginationOptions } from '@shared-types/Pagination';
 import { authServiceSingleton } from '@dependencies/singletons';
 import { userRepositorySingleton } from '@dependencies/singletons';
 

@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { AnimalMedia } from '@infra/sequelize/models/AnimalMedia.model';
 import { Media } from '@infra/sequelize/models/Media.model';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 import { IAnimalMediaRepository, AnimalMediaProps} from '@domain/repositories/IAnimalMediaRepository';
 
 export class SequelizeAnimalMediaRepository implements IAnimalMediaRepository {

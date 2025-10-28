@@ -1,5 +1,5 @@
 import { BreedProps } from '@domain/entities/Breed';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IBreedRepository {
   findById(id: number): Promise<BreedProps | null>;

@@ -2,7 +2,7 @@ import { SpeciesProps } from '@domain/entities/Species';
 import { Species } from '@infra/sequelize/models/Species.model';
 import { Op } from 'sequelize';
 import { ISpeciesRepository} from '@domain/repositories/ISpeciesRepository';
-import { PaginatedResult, PaginationOptions } from '@types/Pagination';
+import { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 
 export class SequelizeSpeciesRepository implements ISpeciesRepository {
   async findById(id: number): Promise<SpeciesProps | null> {

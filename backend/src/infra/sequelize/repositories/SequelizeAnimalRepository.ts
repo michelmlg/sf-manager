@@ -1,6 +1,6 @@
 import { AnimalModel } from '@infra/sequelize/models/Animal.model';
 import { AnimalProps, Animal } from '@domain/entities/Animal';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 import { IAnimalRepository} from '@domain/repositories/IAnimalRepository';
 import { buildWhere } from '@infra/sequelize/utils/filters';
 import { findPaginated } from '@infra/sequelize/utils/findPaginated';

@@ -1,5 +1,5 @@
 import { VaccineProps } from '@domain/entities/Vaccine';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IVaccineRepository {
   findById(id: number): Promise<VaccineProps | null>;

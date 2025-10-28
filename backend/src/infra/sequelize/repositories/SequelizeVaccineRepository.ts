@@ -1,6 +1,6 @@
 import { Vaccine } from '@infra/sequelize/models/Vaccine.model';
 import { VaccineProps } from '@domain/entities/Vaccine';
-import { PaginatedResult, PaginationOptions } from '@types/Pagination';
+import { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 import { IVaccineRepository} from '@domain/repositories/IVaccineRepository';
 import { Op } from 'sequelize';
 

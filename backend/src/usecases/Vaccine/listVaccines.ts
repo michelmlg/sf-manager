@@ -1,5 +1,5 @@
 import { IVaccineRepository } from '@domain/repositories/IVaccineRepository';
-import { PaginationOptions } from '@types/Pagination';
+import { PaginationOptions } from '@shared-types/Pagination';
 
 export function listVaccines(vaccineRepository: IVaccineRepository) {
   return async (options?: PaginationOptions) => {

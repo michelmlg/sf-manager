@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { AnimalFact } from '@infra/sequelize/models/AnimalFact.model';
 import { AnimalFactProps } from '@domain/entities/AnimalFact';
-import { PaginatedResult, PaginationOptions } from '@types/Pagination';
+import { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 import { IAnimalFactRepository } from '@domain/repositories/IAnimalFactRepository';
 
 export class SequelizeAnimalFactRepository implements IAnimalFactRepository {

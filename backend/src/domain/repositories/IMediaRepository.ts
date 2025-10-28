@@ -1,5 +1,5 @@
 import { MediaProps } from '@domain/entities/Media';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IMediaRepository {
   findById(id: string, canViewPrivate?:boolean): Promise<MediaProps | null>;

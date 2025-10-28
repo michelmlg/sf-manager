@@ -1,5 +1,5 @@
 import { AdoptionRequest, AdoptionRequestProps } from '@domain/entities/AdoptionRequest';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 
 export interface IAdoptionRequestRepository {
     create(adoptionRequest: AdoptionRequest): Promise<AdoptionRequest>;

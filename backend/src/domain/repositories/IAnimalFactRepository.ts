@@ -1,5 +1,5 @@
 import { AnimalFactProps } from '@domain/entities/AnimalFact';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export interface IAnimalFactRepository {
   findById(id: string): Promise<AnimalFactProps | null>;

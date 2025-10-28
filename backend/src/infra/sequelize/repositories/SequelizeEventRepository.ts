@@ -1,7 +1,7 @@
 import { IEventRepository } from "@domain/repositories/IEventRepository";
 import { Event, EventProps } from "@domain/entities/Event";
 import { EventModel } from "@infra/sequelize/models/Event.model";
-import { PaginationOptions, PaginatedResult } from "@types/Pagination";
+import { PaginationOptions, PaginatedResult } from "@shared-types/Pagination";
 import { findPaginated } from "@infra/sequelize/utils/findPaginated";
 
 export class SequelizeEventRepository implements IEventRepository {

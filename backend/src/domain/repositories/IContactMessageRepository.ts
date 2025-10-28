@@ -1,5 +1,5 @@
 import { ContactMessage } from '@domain/entities/ContactMessage';
-import type { PaginatedResult, PaginationOptions } from '../../types/Pagination';
+import type { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 
 export interface ContactMessageFilters {
   search?: string; // by name, email, subject

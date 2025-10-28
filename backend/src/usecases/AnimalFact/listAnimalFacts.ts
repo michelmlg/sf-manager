@@ -1,6 +1,6 @@
 import { IAnimalFactRepository } from '@domain/repositories/IAnimalFactRepository';
 import { AnimalFactProps } from '@domain/entities/AnimalFact';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 
 export function listAnimalFacts(animalFactRepository: IAnimalFactRepository) {
   return async (petId: string, options: PaginationOptions): Promise<PaginatedResult<AnimalFactProps>> => {

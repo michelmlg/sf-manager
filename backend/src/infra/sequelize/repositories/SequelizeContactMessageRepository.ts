@@ -1,6 +1,6 @@
 import { ContactMessage } from '@domain/entities/ContactMessage';
 import { IContactMessageRepository, ContactMessageFilters } from '@domain/repositories/IContactMessageRepository';
-import type { PaginatedResult, PaginationOptions } from '../../../types/Pagination';
+import type { PaginatedResult, PaginationOptions } from '@shared-types/Pagination';
 import { ContactMessageModel } from '@infra/sequelize/models/ContactMessage.model';
 import { Op } from 'sequelize';
 

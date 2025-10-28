@@ -1,5 +1,5 @@
 import { IMediaRepository } from '@domain/repositories/IMediaRepository';
-import { PaginationOptions } from '@types/Pagination';
+import { PaginationOptions } from '@shared-types/Pagination';
 import { authServiceSingleton } from '@dependencies/singletons';
 import { userRepositorySingleton } from '@dependencies/singletons';
 

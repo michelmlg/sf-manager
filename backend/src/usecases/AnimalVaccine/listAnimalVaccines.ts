@@ -1,5 +1,5 @@
 import { IAnimalVaccineRepository } from '@domain/repositories/IAnimalVaccineRepository';
-import { PaginationOptions } from '@types/Pagination';
+import { PaginationOptions } from '@shared-types/Pagination';
 
 export function listAnimalVaccines(repo: IAnimalVaccineRepository) {
   return async (petId: String, options?: PaginationOptions) => {

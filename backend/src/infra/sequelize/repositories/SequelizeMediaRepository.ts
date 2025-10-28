@@ -1,7 +1,7 @@
 import { Op } from 'sequelize' 
 import { Media } from '@infra/sequelize/models/Media.model';
 import { MediaProps } from '@domain/entities/Media';
-import { PaginationOptions, PaginatedResult } from '@types/Pagination';
+import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
 import { IMediaRepository} from '@domain/repositories/IMediaRepository';
 
 export class SequelizeMediaRepository implements IMediaRepository {

@@ -1,5 +1,5 @@
 import { IEventRepository } from '@domain/repositories/IEventRepository';
-import { PaginationOptions } from '@types/Pagination';
+import { PaginationOptions } from '@shared-types/Pagination';
 
 export function listEvents(eventRepository: IEventRepository) {
   return async (pagination: PaginationOptions) => {
