@@ -38,8 +38,36 @@ export class EventController {
   }
 
   static async list(req: Request, res: Response) {
+
+    const session = req.session;
+
+    const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string, 10) : 10;
+    const sortBy = (req.query.sortBy as string) || 'entry_date';
+    const sortOrder =
+      (req.query.sortOrder as string)?.toLowerCase() === 'asc' ? 'asc' : 'desc' as 'asc' | 'desc';
+
+    // Filtros (JSON string)
+    let filters: Record<string, any> = {};
+    if (req.query.filters && typeof req.query.filters === 'string') {
+      try {
+        filters = JSON.parse(req.query.filters);
+      } catch {
+        return res.status(400).json({ error: 'Invalid filters JSON format' });
+      }
+    }
+
+    const pagination = {
+      page,
+      pageSize,
+      sortBy, 
+      sortOrder,
+      filters,
+    };
+
+
     try {
-      const events = await listEvents(eventRepository)();
+      const events = await listEvents(eventRepository)(pagination);
       res.json(events);
     } catch (err) {
       console.error(err);

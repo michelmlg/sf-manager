@@ -1,8 +1,16 @@
 import { IEventRepository } from "@domain/repositories/IEventRepository";
-import { Event } from "@domain/entities/Event";
+import { Event, EventProps } from "@domain/entities/Event";
 import { EventModel } from "@infra/sequelize/models/Event.model";
+import { PaginationOptions, PaginatedResult } from "@types/Pagination";
+import { findPaginated } from "@infra/sequelize/utils/findPaginated";
 
 export class SequelizeEventRepository implements IEventRepository {
+
+  private mapToEntity(model: EventModel): Event {
+    const json = model.toJSON();
+    return new Event(json);
+  }
+
   async create(name: string, description: string, place: string, start_at: Date, end_at: Date): Promise<Event> {
     const p = await EventModel.create({ name, description, place, start_at, end_at });
     return new Event(p.toJSON());
@@ -11,6 +19,21 @@ export class SequelizeEventRepository implements IEventRepository {
   async list(): Promise<Event[]> {
     const all = await EventModel.findAll();
     return all.map(p => new Event(p.toJSON()));
+  }
+
+  async findPaginated(options: PaginationOptions): Promise<PaginatedResult<EventProps>> {
+    const result = await findPaginated(EventModel, {
+      page: options.page,
+      pageSize: options.pageSize,
+      filters: {
+        ...options.filters,
+      },
+    });
+
+    return {
+      ...result,
+      items: result.items.map(a => this.mapToEntity(a).props),
+    };
   }
 
   async delete(id: string): Promise<void> {
