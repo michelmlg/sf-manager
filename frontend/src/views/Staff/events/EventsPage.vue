@@ -1,71 +1,227 @@
-<template>
-  <div class="p-6">
-    <!-- Breadcrumb -->
-    <nav class="text-sm text-gray-600 mb-6">
-      <ol class="flex gap-2 items-center">
-        <li><RouterLink to="/staff" class="text-blue-600 hover:underline">Dashboard</RouterLink></li>
-        <li>/</li>
-        <li>Eventos</li>
-      </ol>
-    </nav>
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue';
+import { Search, Plus, Edit, Trash2 } from 'lucide-vue-next';
+import Pagination from '@/components/Pagination.vue';
+import { showToast } from '@/utils/uiAlerts/toast';
 
+const events = ref([]);
+const loading = ref(false);
+const total = ref(0);
+const page = ref(1);
+const pageSize = ref(20);
+const search = ref('');
+const dateFrom = ref(null);
+const dateTo = ref(null);
+const isModalOpen = ref(false);
+const isEditing = ref(false);
+const editingId = ref(null);
+
+const newEvent = ref({
+  name: '',
+  description: '',
+  place: '',
+  date: '',
+  start_time: '',
+  end_time: ''
+});
+
+// --- WATCHERS ---
+watch([page, pageSize, search, dateFrom, dateTo], fetchEvents, { immediate: true });
+
+// --- FUNÇÕES ---
+async function fetchEvents() {
+  loading.value = true;
+  try {
+    const filters = {};
+
+    if (search.value) {
+      filters.search = search.value;
+      filters.searchFields = ['name', 'place', 'description'];
+    }
+
+    if (dateFrom.value || dateTo.value) {
+      filters.dateFilters = {
+        start_at: { from: dateFrom.value, to: dateTo.value }
+      };
+    }
+
+    const params = new URLSearchParams({
+      page: page.value.toString(),
+      pageSize: pageSize.value.toString(),
+      filters: JSON.stringify(filters)
+    });
+
+    const res = await fetch(`/api/event?${params}`);
+    if (!res.ok) throw new Error(`Erro: ${res.status}`);
+    const data = await res.json();
+
+    events.value = data.items;
+    total.value = data.total;
+    page.value = data.page;
+    pageSize.value = data.pageSize;
+  } catch (err) {
+    console.error('Erro ao carregar eventos:', err);
+    showToast({ icon: 'error', title: 'Erro ao carregar eventos', description: err.message });
+  } finally {
+    loading.value = false;
+  }
+}
+
+function openCreateModal() {
+  resetForm();
+  isEditing.value = false;
+  isModalOpen.value = true;
+}
+
+function startEdit(event) {
+  isEditing.value = true;
+  editingId.value = event.id;
+  newEvent.value = {
+    name: event.name,
+    description: event.description,
+    place: event.place,
+    date: event.start_at ? event.start_at.slice(0, 10) : '',
+    start_time: event.start_at ? new Date(event.start_at).toISOString().slice(11, 16) : '',
+    end_time: event.end_at ? new Date(event.end_at).toISOString().slice(11, 16) : ''
+  };
+  isModalOpen.value = true;
+}
+
+function resetForm() {
+  newEvent.value = { name: '', description: '', place: '', date: '', start_time: '', end_time: '' };
+}
+
+function closeModal() {
+  isModalOpen.value = false;
+  resetForm();
+}
+
+async function createEvent() {
+  try {
+    const payload = {
+      name: newEvent.value.name,
+      place: newEvent.value.place,
+      description: newEvent.value.description,
+      start_at: `${newEvent.value.date}T${newEvent.value.start_time}`,
+      end_at: `${newEvent.value.date}T${newEvent.value.end_time}`
+    };
+
+    const res = await fetch('/api/event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error('Erro ao criar evento');
+    await fetchEvents();
+    showToast({ icon: 'success', title: 'Evento criado com sucesso' });
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    showToast({ icon: 'error', title: 'Erro ao criar evento', description: err.message });
+  }
+}
+
+async function saveEdit() {
+  try {
+    const res = await fetch(`/api/event/${editingId.value}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: newEvent.value.name,
+        place: newEvent.value.place,
+        description: newEvent.value.description,
+        start_at: `${newEvent.value.date}T${newEvent.value.start_time}`,
+        end_at: `${newEvent.value.date}T${newEvent.value.end_time}`
+      })
+    });
+
+    if (!res.ok) throw new Error('Erro ao atualizar evento');
+    await fetchEvents();
+    showToast({ icon: 'success', title: 'Evento atualizado' });
+    closeModal();
+  } catch (err) {
+    showToast({ icon: 'error', title: 'Erro ao atualizar evento', description: err.message });
+  }
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Tem certeza que deseja excluir este evento?')) return;
+  try {
+    const res = await fetch(`/api/event/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Erro ao excluir evento');
+    await fetchEvents();
+    showToast({ icon: 'success', title: 'Evento excluído com sucesso' });
+  } catch (err) {
+    showToast({ icon: 'error', title: 'Erro ao excluir evento', description: err.message });
+  }
+}
+</script>
+
+<template>
+  <div>
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-gray-800">Eventos</h1>
-        <p class="text-gray-500">Gerencie seus eventos</p>
+        <h1 class="text-3xl font-heading text-ong-text">Eventos</h1>
+        <p class="text-muted-foreground mt-2">Gerencie os eventos da ONG</p>
       </div>
-      <button class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" @click="openCreateModal">
+      <button
+        @click="openCreateModal"
+        class="flex items-center gap-2 px-4 py-2 bg-ong-primary text-white rounded-lg shadow hover:bg-ong-accent transition"
+      >
         <Plus class="w-4 h-4" /> Adicionar Evento
       </button>
     </div>
 
-    <!-- Search & Filters -->
-    <div class="mb-6 flex gap-4">
-      <div class="relative w-full">
-        <Search class="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-        <input
-          v-model="searchTerm"
-          type="text"
-          placeholder="Buscar por nome, local ou descrição..."
-          class="w-full pl-10 pr-4 py-2 border rounded-md focus:ring focus:ring-blue-300"
-        />
-      </div>
-      <button class="border px-4 py-2 rounded hover:bg-gray-100">Filtros</button>
-    </div>
+    <Pagination
+      :total="total"
+      :page="page"
+      :pageSize="pageSize"
+      :search="search"
+      :dateRange="{
+        from: dateFrom,
+        to: dateTo,
+        onFromChange: val => { dateFrom.value = val; page.value = 1 },
+        onToChange: val => { dateTo.value = val; page.value = 1 }
+      }"
+      @update:page="val => (page = val)"
+      @update:pageSize="val => { pageSize = val; page = 1 }"
+      @update:search="val => { search = val; page = 1 }"
+    />
 
     <!-- Table -->
-    <div class="overflow-x-auto bg-white border rounded-md shadow-sm">
-      <table class="min-w-full text-sm">
-        <thead class="bg-gray-100">
-          <tr class="text-left">
-            <th class="p-3">Nome</th>
-            <th class="p-3">Local</th>
-            <th class="p-3">Início</th>
-            <th class="p-3">Fim</th>
-            <th class="p-3 text-right">Ações</th>
+    <div class="overflow-x-auto bg-card rounded-lg shadow-sm animate-fade-in mt-6">
+      <table class="w-full table-auto text-sm">
+        <thead class="text-muted-foreground bg-ong-popover uppercase text-xs">
+          <tr>
+            <th class="px-4 py-3 text-left">Nome</th>
+            <th class="px-4 py-3 text-left">Local</th>
+            <th class="px-4 py-3 text-left">Início</th>
+            <th class="px-4 py-3 text-left">Fim</th>
+            <th class="px-4 py-3 text-right">Ações</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="loading">
-            <td colspan="5" class="p-4 text-gray-500">Carregando eventos...</td>
+            <td colspan="5" class="p-4 text-center text-muted-foreground">Carregando...</td>
           </tr>
-          <tr v-else-if="filteredEvents.length === 0">
-            <td colspan="5" class="p-4 text-gray-500">Nenhum evento encontrado.</td>
+          <tr v-else-if="events.length === 0">
+            <td colspan="5" class="p-4 text-center text-muted-foreground">Nenhum evento encontrado.</td>
           </tr>
           <tr
-            v-for="event in currentEvents"
+            v-for="event in events"
             :key="event.id"
-            class="border-t hover:bg-gray-50"
+            class="border-t hover:bg-ong-background/60 transition"
           >
-            <td class="p-3 font-medium text-gray-800">{{ event.name }}</td>
-            <td class="p-3">{{ event.place }}</td>
-            <td class="p-3 text-gray-600">{{ formatDateTime(event.start_at) }}</td>
-            <td class="p-3 text-gray-600">{{ formatDateTime(event.end_at) }}</td>
+            <td class="p-3 font-medium text-foreground">{{ event.name }}</td>
+            <td class="p-3 text-muted-foreground">{{ event.place }}</td>
+            <td class="p-3 text-muted-foreground">{{ new Date(event.start_at).toLocaleString('pt-BR') }}</td>
+            <td class="p-3 text-muted-foreground">{{ new Date(event.end_at).toLocaleString('pt-BR') }}</td>
             <td class="p-3 text-right">
-              <div class="flex justify-end gap-1">
-                <button class="p-1 hover:text-yellow-600" @click="startEdit(event)"><Edit class="w-4 h-4" /></button>
-                <button class="p-1 hover:text-red-600" @click="deleteEvent(event.id)"><Trash2 class="w-4 h-4" /></button>
+              <div class="flex justify-end gap-2">
+                <button @click="startEdit(event)" class="p-1 hover:text-yellow-600"><Edit class="w-4 h-4" /></button>
+                <button @click="deleteEvent(event.id)" class="p-1 hover:text-red-600"><Trash2 class="w-4 h-4" /></button>
               </div>
             </td>
           </tr>
@@ -73,290 +229,54 @@
       </table>
     </div>
 
-    <!-- Pagination summary & controls -->
-    <div class="mt-6 flex justify-between items-center text-sm text-gray-500">
-      <div>
-        Mostrando {{ startIndex + 1 }} a {{ Math.min(endIndex, filteredEvents.length) }} de {{ filteredEvents.length }} eventos
-      </div>
-      <div class="flex gap-1">
-        <button
-          @click="currentPage--"
-          :disabled="currentPage === 1"
-          class="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Anterior
-        </button>
-        <button
-          v-for="page in totalPages"
-          :key="page"
-          @click="currentPage = page"
-          :class="[
-            'px-3 py-1 border rounded',
-            currentPage === page ? 'bg-blue-600 text-white' : ''
-          ]"
-        >
-          {{ page }}
-        </button>
-        <button
-          @click="currentPage++"
-          :disabled="currentPage === totalPages"
-          class="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Próximo
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal: Adicionar Evento -->
-  <div
-    v-if="isModalOpen"
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-  >
-    <div class="bg-white p-6 rounded-md w-full max-w-2xl shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-lg font-semibold">{{ isEditing ? 'Editar Evento' : 'Adicionar Evento' }}</h2>
-        <button @click="closeModal" aria-label="Fechar" class="text-gray-500 hover:text-gray-700">✕</button>
-      </div>
+    <!-- Modal -->
+    <div
+      v-if="isModalOpen"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div class="bg-white p-6 rounded-xl w-full max-w-2xl shadow-lg">
+        <h2 class="text-lg font-semibold mb-4">
+          {{ isEditing ? 'Editar Evento' : 'Adicionar Evento' }}
+        </h2>
 
-      <form @submit.prevent="isEditing ? saveEdit() : createEvent()">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm text-gray-600 mb-1">Nome</label>
-            <input v-model="newEvent.name" type="text" class="border p-2 rounded w-full" required />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-600 mb-1">Local</label>
-            <input v-model="newEvent.place" type="text" class="border p-2 rounded w-full" required />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-600 mb-1">Dia</label>
-            <input v-model="newEvent.date" type="date" class="border p-2 rounded w-full" required />
-          </div>
-          <div class="grid grid-cols-2 gap-4">
+        <form @submit.prevent="isEditing ? saveEdit() : createEvent()">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm text-gray-600 mb-1">Início</label>
-              <input v-model="newEvent.start_time" type="time" class="border p-2 rounded w-full" required />
+              <label class="block text-sm text-gray-600 mb-1">Nome</label>
+              <input v-model="newEvent.name" type="text" class="border p-2 rounded w-full" required />
             </div>
             <div>
-              <label class="block text-sm text-gray-600 mb-1">Fim</label>
-              <input v-model="newEvent.end_time" type="time" class="border p-2 rounded w-full" required />
+              <label class="block text-sm text-gray-600 mb-1">Local</label>
+              <input v-model="newEvent.place" type="text" class="border p-2 rounded w-full" required />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">Dia</label>
+              <input v-model="newEvent.date" type="date" class="border p-2 rounded w-full" required />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Início</label>
+                <input v-model="newEvent.start_time" type="time" class="border p-2 rounded w-full" required />
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">Fim</label>
+                <input v-model="newEvent.end_time" type="time" class="border p-2 rounded w-full" required />
+              </div>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm text-gray-600 mb-1">Descrição</label>
+              <textarea v-model="newEvent.description" class="border p-2 rounded w-full" rows="3" required></textarea>
             </div>
           </div>
-          <div class="md:col-span-2">
-            <label class="block text-sm text-gray-600 mb-1">Descrição</label>
-            <textarea v-model="newEvent.description" class="border p-2 rounded w-full" rows="3" required></textarea>
+
+          <div class="mt-6 flex justify-end gap-2">
+            <button type="button" @click="closeModal" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancelar</button>
+            <button type="submit" class="px-4 py-2 rounded bg-ong-primary text-white hover:bg-ong-accent">
+              {{ isEditing ? 'Salvar' : 'Adicionar' }}
+            </button>
           </div>
-        </div>
-
-        <p v-if="errors.submit" class="text-sm text-red-600 mt-4">{{ errors.submit }}</p>
-
-        <div class="mt-6 flex justify-end gap-2">
-          <button type="button" @click="closeModal" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancelar</button>
-          <button type="submit" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white">{{ isEditing ? 'Salvar' : 'Adicionar' }}</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted, computed } from "vue";
-import { showToast } from "@/utils/uiAlerts/toast";
-import { Search, Plus, Edit, Trash2 } from 'lucide-vue-next';
-
-const events = ref([]);
-const loading = ref(true);
-const isModalOpen = ref(false);
-const isEditing = ref(false);
-const editingId = ref(null);
-const errors = ref({});
-const searchTerm = ref('');
-const currentPage = ref(1);
-const itemsPerPage = 10;
-
-const newEvent = ref({
-  name: "",
-  description: "",
-  place: "",
-  date: "",
-  start_time: "",
-  end_time: "",
-});
-
-const resetForm = () => {
-  newEvent.value = { name: "", description: "", place: "", date: "", start_time: "", end_time: "" };
-  errors.value = {};
-  isEditing.value = false;
-  editingId.value = null;
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
-  resetForm();
-};
-
-const openCreateModal = () => {
-  resetForm();
-  isEditing.value = false;
-  isModalOpen.value = true;
-};
-
-const fetchEvents = async () => {
-  loading.value = true;
-  try {
-    const res = await fetch("/api/event");
-    if (!res.ok) throw new Error(res.message);
-    events.value = await res.json();
-  } catch (err) {
-    console.error(err);
-  } finally {
-    loading.value = false;
-  }
-};
-
-const createEvent = async () => {
-  try {
-    const start_at = combineDateAndTime(newEvent.value.date, newEvent.value.start_time);
-    const end_at = combineDateAndTime(newEvent.value.date, newEvent.value.end_time);
-
-    const res = await fetch("/api/event", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        name: newEvent.value.name,
-        place: newEvent.value.place,
-        description: newEvent.value.description,
-        start_at,
-        end_at,
-      }),
-    });
-
-    if (!res.ok) {
-      let message = 'Erro ao criar evento';
-      try {
-        const result = await res.json();
-        message = result.message || result.error || message;
-      } catch (e) {
-        const text = await res.text();
-        if (text) message = text;
-      }
-      throw new Error(message);
-    }
-
-    const createdEvent = await res.json();
-    events.value.push(createdEvent);
-    showToast({ icon: 'success', title: 'Evento criado com sucesso' });
-    closeModal();
-  } catch (err) {
-    console.error(err);
-    errors.value = { submit: err.message || 'Erro ao criar evento' };
-    showToast({ icon: 'error', title: 'Erro ao criar evento', description: err.message });
-  }
-};
-
-const deleteEvent = async (id) => {
-  if (!confirm("Tem certeza que deseja excluir este evento?")) return;
-  try {
-    const res = await fetch("/api/event", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ id }),
-    });
-
-    if (!res.ok) throw new Error("Erro ao deletar evento");
-
-    events.value = events.value.filter((e) => e.id !== id);
-    showToast({ icon: 'success', title: 'Evento excluído' });
-  } catch (err) {
-    console.error(err);
-    showToast({ icon: 'error', title: 'Erro ao excluir evento' });
-  }
-};
-
-const formatDateTime = (date) => new Date(date).toLocaleString('pt-BR');
-
-function combineDateAndTime(dateStr, timeStr) {
-  if (!dateStr || !timeStr) return "";
-  return `${dateStr}T${timeStr}`; // browser will send as local time
-}
-
-function timeFromDateStr(dateStr) {
-  if (!dateStr) return "";
-  const d = new Date(dateStr);
-  const pad = (n) => String(n).padStart(2, '0');
-  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
-// filtering & pagination
-const filteredEvents = computed(() => {
-  const term = searchTerm.value.toLowerCase();
-  return events.value.filter(e =>
-    (e.name || '').toLowerCase().includes(term) ||
-    (e.place || '').toLowerCase().includes(term) ||
-    (e.description || '').toLowerCase().includes(term)
-  );
-});
-
-const totalPages = computed(() => Math.max(1, Math.ceil(filteredEvents.value.length / itemsPerPage)));
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage);
-const endIndex = computed(() => startIndex.value + itemsPerPage);
-const currentEvents = computed(() => filteredEvents.value.slice(startIndex.value, endIndex.value));
-
-onMounted(fetchEvents);
-
-// Edit flow
-const startEdit = (event) => {
-  isEditing.value = true;
-  editingId.value = event.id;
-  newEvent.value = {
-    name: event.name || "",
-    description: event.description || "",
-    place: event.place || "",
-    date: event.start_at ? String(event.start_at).slice(0,10) : "",
-    start_time: timeFromDateStr(event.start_at),
-    end_time: timeFromDateStr(event.end_at),
-  };
-  isModalOpen.value = true;
-};
-
-const saveEdit = async () => {
-  try {
-    const res = await fetch(`/api/event/${editingId.value}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        name: newEvent.value.name,
-        place: newEvent.value.place,
-        description: newEvent.value.description,
-        start_at: combineDateAndTime(newEvent.value.date, newEvent.value.start_time),
-        end_at: combineDateAndTime(newEvent.value.date, newEvent.value.end_time),
-      }),
-    });
-
-    if (!res.ok) {
-      let message = 'Erro ao salvar alterações';
-      try {
-        const result = await res.json();
-        message = result.message || result.error || message;
-      } catch (e) {
-        const text = await res.text();
-        if (text) message = text;
-      }
-      throw new Error(message);
-    }
-
-    const updated = await res.json();
-    const idx = events.value.findIndex(e => e.id === editingId.value);
-    if (idx !== -1) events.value[idx] = updated;
-    showToast({ icon: 'success', title: 'Evento atualizado' });
-    closeModal();
-  } catch (err) {
-    console.error(err);
-    showToast({ icon: 'error', title: 'Erro ao atualizar evento', description: err.message });
-  }
-};
-</script>

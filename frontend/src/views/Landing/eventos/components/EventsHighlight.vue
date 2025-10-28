@@ -8,7 +8,13 @@
           <Calendar size="24" />
           Próximo Evento
         </h5>
-        <EventCard v-if="nextEvent" :event="nextEvent" :isHighlighted="true" :isNext="true"/>
+
+        <EventCard 
+          v-if="nextEvent" 
+          :event="nextEvent" 
+          :isHighlighted="true" 
+          :isNext="true"
+        />
         <div v-else class="text-sm text-ong-text/70">Nenhum evento futuro cadastrado.</div>
       </div>
 
@@ -19,14 +25,18 @@
           Outros Eventos
         </h5>
 
-        <div class="space-y-4 max-h-48 overflow-y-auto">
-          <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" />
-          <div v-if="!loading && upcomingEvents.length === 0" class="text-sm text-ong-text/70">
+        <div v-if="loading" class="text-sm text-ong-text/70">Carregando eventos...</div>
+
+        <div v-else class="space-y-4 max-h-48 overflow-y-auto">
+          <EventCard 
+            v-for="event in upcomingEvents" 
+            :key="event.id" 
+            :event="event" 
+          />
+          <div v-if="upcomingEvents.length === 0" class="text-sm text-ong-text/70">
             Nenhum outro evento no momento.
           </div>
         </div>
-
-        
       </div>
 
     </div>
@@ -37,6 +47,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Calendar } from 'lucide-vue-next';
 import EventCard from './EventCard.vue';
+import { showToast } from '@/utils/uiAlerts/toast';
 
 const events = ref([]);
 const loading = ref(true);
@@ -53,31 +64,59 @@ function mapToCard(e) {
     description: e.description,
     location: e.place,
     type: 'general',
-    startAt: start, // guardar objeto Date para comparação futura
+    startAt: start, 
   };
 }
 
 const nextEvent = computed(() => events.value[0] || null);
 const upcomingEvents = computed(() => events.value.slice(1));
 
-onMounted(async () => {
+async function loadEvents() {
+  loading.value = true;
+
   try {
-    const res = await fetch('/api/event');
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 2, 0); // até o fim do próximo mês
+
+    const filters = {
+      dateFilters: {
+        start_at: {
+          from: startDate.toISOString(),
+          to: endDate.toISOString(),
+        },
+      },
+    };
+
+    const params = new URLSearchParams({
+      page: '1',
+      pageSize: '200',
+      filters: JSON.stringify(filters),
+    });
+
+    const res = await fetch(`/api/event?${params.toString()}`);
+    if (!res.ok) throw new Error(`Erro ${res.status}`);
     const data = await res.json();
 
-    const now = new Date();
+    const items = Array.isArray(data.items) ? data.items : [];
 
-    const sorted = (Array.isArray(data) ? data : [])
+    const mapped = items
       .map(mapToCard)
-      .filter(e => e.startAt >= now) // pega apenas eventos futuros
-      .sort((a, b) => a.startAt - b.startAt); // ordena por data
+      .filter(e => e.startAt >= now) 
+      .sort((a, b) => a.startAt - b.startAt);
 
-    events.value = sorted;
+    events.value = mapped;
   } catch (err) {
     console.error('Erro ao carregar eventos:', err);
+    showToast({
+      icon: 'error',
+      title: 'Erro ao carregar eventos',
+      description: err.message,
+    });
   } finally {
     loading.value = false;
   }
-});
-</script>
+}
 
+onMounted(loadEvents);
+</script>
