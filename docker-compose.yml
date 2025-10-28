@@ -31,7 +31,16 @@ services:
     platform: linux/amd64
     restart: always
     command: >
-      sh -c "npm install && npm run dev"
+      sh -c "
+        if [ \"$NODE_ENV\" = 'production' ]; then
+          npm install --omit=dev &&
+          npm run build &&
+          npm start;
+        else
+          npm install &&
+          npm run dev;
+        fi
+      "
     volumes:
       - ./backend:/srv/app
     ports:
@@ -47,7 +56,16 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     command: >
-      sh -c "npm install && npm run dev"
+      sh -c "
+        if [ \"$NODE_ENV\" = 'production' ]; then
+          npm install --omit=dev &&
+          npm run build &&
+          npx serve -s dist -l 5173;
+        else
+          npm install &&
+          npm run dev;
+        fi
+      "
     volumes:
       - ./frontend:/srv/app
     ports:

@@ -2,7 +2,8 @@ import { Op } from 'sequelize';
 import { AnimalMedia } from '@infra/sequelize/models/AnimalMedia.model';
 import { Media } from '@infra/sequelize/models/Media.model';
 import { PaginationOptions, PaginatedResult } from '@shared-types/Pagination';
-import { IAnimalMediaRepository, AnimalMediaProps} from '@domain/repositories/IAnimalMediaRepository';
+import { IAnimalMediaRepository} from '@domain/repositories/IAnimalMediaRepository';
+import { AnimalMediaProps } from '@domain/entities/AnimalMedia';
 
 export class SequelizeAnimalMediaRepository implements IAnimalMediaRepository {
   async findById(id: string): Promise<AnimalMediaProps | null> {
