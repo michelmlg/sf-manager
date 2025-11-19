@@ -9,7 +9,7 @@ import { SequelizeEventRepository } from '@infra/sequelize/repositories/Sequeliz
 const eventRepository = new SequelizeEventRepository();
 
 export class EventController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { name, description, place, start_at, end_at } = req.body;
 
@@ -37,7 +37,7 @@ export class EventController {
     }
   }
 
-  static async list(req: Request, res: Response) {
+  static async list(req: Request, res: Response):Promise<any> {
 
     const session = req.session;
 
@@ -77,7 +77,7 @@ export class EventController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.body;
 
@@ -96,7 +96,7 @@ export class EventController {
     }
   }
 
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const { name, description, place, start_at, end_at } = req.body;

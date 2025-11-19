@@ -11,7 +11,7 @@ const speciesRepo = new SequelizeSpeciesRepository();
 const breedRepo = new SequelizeBreedRepository();
 
 export class AnimalController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const animalData = req.body;
 
@@ -25,7 +25,7 @@ export class AnimalController {
     }
   }
 
-  static async list(req: Request, res: Response) {
+  static async list(req: Request, res: Response):Promise<any> {
     try {
       // Paginação e ordenação
       const session = req.session;
@@ -67,7 +67,7 @@ export class AnimalController {
   }
   
 
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
 
@@ -86,7 +86,7 @@ export class AnimalController {
     }
   }
 
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const updateData = req.body;
@@ -120,7 +120,7 @@ export class AnimalController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
 

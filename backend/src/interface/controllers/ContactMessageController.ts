@@ -8,7 +8,7 @@ import { markContactMessageRead } from '@usecases/ContactMessage/markContactMess
 const contactRepo = new SequelizeContactMessageRepository();
 
 export class ContactMessageController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { subject, email, name, message, acceptPolicy, allowContact } = req.body;
       const created = await createContactMessage(contactRepo)({
@@ -28,7 +28,7 @@ export class ContactMessageController {
     }
   }
 
-  static async list(req: Request, res: Response) {
+  static async list(req: Request, res: Response):Promise<any> {
     try {
       const page = parseInt((req.query.page as string) || '1', 10);
       const pageSize = parseInt((req.query.pageSize as string) || '10', 10);
@@ -56,7 +56,7 @@ export class ContactMessageController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       await deleteContactMessage(contactRepo)(id);
@@ -66,7 +66,7 @@ export class ContactMessageController {
     }
   }
 
-  static async markRead(req: Request, res: Response) {
+  static async markRead(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const { read } = req.body as { read: boolean };

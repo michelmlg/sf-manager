@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthService } from '@infra/services/AuthService';
 
 export function requireAuth(authService: AuthService) {
   return (req: Request, res: Response, next: NextFunction) => {

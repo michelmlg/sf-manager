@@ -4,7 +4,7 @@ import { SequelizeSpeciesRepository } from '@infra/sequelize/repositories/Sequel
 const speciesRepo = new SequelizeSpeciesRepository();
 
 export class SpeciesController {
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response):Promise<any> {
     try {
       const { page = 1, pageSize = 10, search = '' } = req.query;
       const data = await speciesRepo.searchByName(String(search), {
@@ -17,7 +17,7 @@ export class SpeciesController {
     }
   }
 
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const species = await speciesRepo.findById(Number(id));
@@ -28,7 +28,7 @@ export class SpeciesController {
     }
   }
 
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { name } = req.body;
       const species = await speciesRepo.create({ name });
@@ -38,7 +38,7 @@ export class SpeciesController {
     }
   }
 
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const data = req.body;
@@ -50,7 +50,7 @@ export class SpeciesController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const deleted = await speciesRepo.delete(Number(id));

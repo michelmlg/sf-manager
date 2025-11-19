@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { userRepositorySingleton } from 'src/dependencies/singletons';
-import { authServiceSingleton } from 'src/dependencies/singletons';
+import { userRepositorySingleton } from '@dependencies/singletons';
+import { authServiceSingleton } from '@dependencies/singletons';
 
 import { registerUser } from '@usecases/User/registerUser';
 import { loginUser } from '@usecases/User/loginUser';
@@ -31,6 +31,7 @@ export class UserController {
   }
   
   static async login(req: Request, res: Response) {
+    if(!req.session) throw "Sessão não definida"; 
     try {
       const token = await loginUser(userRepositorySingleton, authServiceSingleton)(
         req.body.email,
@@ -46,7 +47,8 @@ export class UserController {
   }
 
   static async logout(req: Request, res: Response) {
-    req.session.destroy((err) => {
+    if(!req.session) throw "Sessão não definida"; 
+    req.session.destroy((err: Error | null) => {
       if (err) {
         return res.status(500).json({ error: 'Erro ao encerrar sessão' });
       }
@@ -69,6 +71,7 @@ export class UserController {
   }
 
   static async listPermissions(req: Request, res: Response) {
+    if(!req.session) throw "Sessão não definida"; 
     const token = req.session.token;
 
     if (!token){
@@ -79,6 +82,8 @@ export class UserController {
     try {
       const payload = authServiceSingleton.verifyToken(token);
       req.session.userId = payload.id;  // Salva userId na sessão para uso futuro
+
+      if(!req.session.userId) throw "ID do usuário indefinido";
 
       // Agora busque as permissões
       //const permissions = await getUserPermissions(payload.id);
@@ -136,8 +141,11 @@ export class UserController {
   }
 
    // Usuário troca a própria senha (precisa informar senha antiga)
-  static async changePassword(req: Request, res: Response) {
+  static async changeUserPassword(req: Request, res: Response) {
     const userId = req.user?.id;
+
+    if(!userId) throw "User ID não foi definido"; 
+    
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {

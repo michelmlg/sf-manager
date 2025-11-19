@@ -4,7 +4,7 @@ import { SequelizeBreedRepository } from '@infra/sequelize/repositories/Sequeliz
 const breedRepo = new SequelizeBreedRepository();
 
 export class BreedController {
-  static async getAll(req: Request, res: Response) {
+  static async getAll(req: Request, res: Response):Promise<any> {
     try {
       const { page = 1, pageSize = 10, search = '' } = req.query;
       const data = await breedRepo.searchByName(String(search), {
@@ -17,7 +17,7 @@ export class BreedController {
     }
   }
 
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const breed = await breedRepo.findById(Number(id));
@@ -28,7 +28,7 @@ export class BreedController {
     }
   }
 
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { name, speciesId } = req.body;
       const breed = await breedRepo.create({ name, speciesId });
@@ -38,7 +38,7 @@ export class BreedController {
     }
   }
 
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const data = req.body;
@@ -50,7 +50,7 @@ export class BreedController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const deleted = await breedRepo.delete(Number(id));
@@ -61,7 +61,7 @@ export class BreedController {
     }
   }
 
-  static async getBySpecies(req: Request, res: Response) {
+  static async getBySpecies(req: Request, res: Response):Promise<any> {
     try {
       const { speciesId, search = '', page = 1, pageSize = 10 } = req.query;
       const data = await breedRepo.findBySpecies(

@@ -65,8 +65,8 @@ export function buildWhere(
     // Busca em associações
     if (options.includeAssociations) {
       const associations = Object.keys(model.associations);
-      const assocToInclude = Array.isArray(options.includeAssociations)
-        ? associations.filter(a => options.includeAssociations.includes(a))
+      const assocToInclude: string[] = Array.isArray(options.includeAssociations)
+        ? associations.filter(a => (options.includeAssociations as string[]).includes(a))
         : associations;
 
       for (const assocName of assocToInclude) {
@@ -82,7 +82,9 @@ export function buildWhere(
       }
     }
 
-    if (orConditions.length) where[Op.or] = orConditions;
+    if (orConditions.length) {
+      (where as any)[Op.or] = orConditions;
+    }
   }
 
   // FILTROS DE DATA
