@@ -31,7 +31,7 @@ const showReviewModal = ref(false);
 const reviewNotes = ref('');
 const isReviewing = ref(false);
 
-// 🔹 helpers visuais (mesmos da página principal)
+// helpers visuais (mesmos da página principal)
 function getStatusColor(status) {
   switch (status) {
     case 'pending':
@@ -71,7 +71,7 @@ function getStatusText(status) {
   }
 }
 
-// 🔹 buscar solicitações
+// buscar solicitações
 async function fetchRequests() {
   if (!props.petId) return;
   loading.value = true;
@@ -100,14 +100,14 @@ async function fetchRequests() {
   }
 }
 
-// 🔹 abrir modal de revisão
+// abrir modal de revisão
 function openReviewModal(request) {
   selectedRequest.value = request;
   reviewNotes.value = '';
   showReviewModal.value = true;
 }
 
-// 🔹 revisar solicitação
+// revisar solicitação
 async function reviewRequest(action) {
   if (!selectedRequest.value) return;
   isReviewing.value = true;
