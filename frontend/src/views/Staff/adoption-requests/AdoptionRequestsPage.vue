@@ -442,23 +442,23 @@ async function removeRequest(request) {
   isRemoving.value = true;
   
   try {
-    console.log('🗑️ Removendo pedido:', request.id);
+    console.log('Removendo pedido:', request.id);
     
     const response = await fetch(`/api/adoption-request/${request.id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' }
     });
 
-    console.log('📨 Resposta da remoção:', response.status, response.statusText);
+    console.log('Resposta da remoção:', response.status, response.statusText);
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.log('❌ Erro na remoção:', errorData);
+      console.log('Erro na remoção:', errorData);
       throw new Error(errorData.error || 'Erro ao remover pedido');
     }
 
     const result = await response.json();
-    console.log('✅ Remoção bem-sucedida:', result);
+    console.log('Remoção bem-sucedida:', result);
     
     // Remove from the local list
     const index = adoptionRequests.value.findIndex(r => r.id === request.id);

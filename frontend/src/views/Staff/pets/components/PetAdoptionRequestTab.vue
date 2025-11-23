@@ -7,13 +7,15 @@ import {
   XCircle,
   Clock,
   Ban,
-  Check
+  Check,
+  Trash2
 } from 'lucide-vue-next';
 
 import Pagination from '@/components/Pagination.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import { formatarData } from '@/utils/format/index.js';
 import { showToast } from '@/utils/uiAlerts/toast';
+import { showConfirm } from '@/utils/uiAlerts/confirm';
 
 const props = defineProps({ petId: String });
 
@@ -31,7 +33,7 @@ const showReviewModal = ref(false);
 const reviewNotes = ref('');
 const isReviewing = ref(false);
 
-// 🔹 helpers visuais (mesmos da página principal)
+// helpers visuais (mesmos da página principal)
 function getStatusColor(status) {
   switch (status) {
     case 'pending':
@@ -71,7 +73,58 @@ function getStatusText(status) {
   }
 }
 
-// 🔹 buscar solicitações
+async function removeRequest(request) {
+  const confirmed = await showConfirm({ text: `Tem certeza que deseja remover o pedido de adoção de ${request.responsibleName}?\n\nEsta ação não pode ser desfeita.` });
+  // const confirmed = confirm(`Tem certeza que deseja remover o pedido de adoção de ${request.responsibleName}?\n\nEsta ação não pode ser desfeita.`);
+  
+  if (!confirmed) {
+    return;
+  }
+  
+  try {
+    console.log('Removendo pedido:', request.id);
+    
+    const response = await fetch(`/api/adoption-request/${request.id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    console.log('Resposta da remoção:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('Erro na remoção:', errorData);
+      throw new Error(errorData.error || 'Erro ao remover pedido');
+    }
+
+    const result = await response.json();
+    console.log('Remoção bem-sucedida:', result);
+    
+    // Remove from the local list
+    const index = requests.value.findIndex(r => r.id === request.id);
+    if (index !== -1) {
+      requests.value.splice(index, 1);
+    }
+
+    showToast({
+      icon: 'success',
+      title: 'Pedido removido!',
+      description: result.message || 'O pedido foi removido com sucesso.',
+      timer: 4000,
+    });
+
+  } catch (error) {
+    console.error('Erro ao remover pedido:', error);
+    showToast({
+      icon: 'error',
+      title: 'Erro ao remover',
+      description: error.message || 'Não foi possível remover o pedido.',
+      timer: 4000,
+    });
+  }
+}
+
+// buscar solicitações
 async function fetchRequests() {
   if (!props.petId) return;
   loading.value = true;
@@ -100,14 +153,14 @@ async function fetchRequests() {
   }
 }
 
-// 🔹 abrir modal de revisão
+// abrir modal de revisão
 function openReviewModal(request) {
   selectedRequest.value = request;
   reviewNotes.value = '';
   showReviewModal.value = true;
 }
 
-// 🔹 revisar solicitação
+// revisar solicitação
 async function reviewRequest(action) {
   if (!selectedRequest.value) return;
   isReviewing.value = true;
@@ -217,6 +270,14 @@ watch([page, pageSize, search], fetchRequests);
                   size="sm"
                   title="Revisar"
                   @click="openReviewModal(req)"
+                />
+
+                <BaseButton
+                  v-if="req.status === 'approved' || req.status === 'rejected'"
+                  :icon="Trash2"
+                  variant="danger"
+                  size="sm"
+                  @click="removeRequest(req)"
                 />
               </div>
             </td>
