@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt';
 
 export function updateUser(userRepo: IUserRepository) {
   return async (data: UserProps): Promise<User> => {
+    if(!data.id) throw "Propriedades indefinidas ao atualiza usuário";
+
     const existingUser = await userRepo.findById(data.id);
 
     if(!existingUser){

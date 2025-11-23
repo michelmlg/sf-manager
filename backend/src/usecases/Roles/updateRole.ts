@@ -14,7 +14,7 @@ export function updateRole(roleRepository: IRoleRepository) {
 
     const allRoles = await roleRepository.list();
     const isDuplicate = allRoles.some(
-      r => r.props.name === name && r.props.id !== roleId
+      (r: any) => r.props.name === name && r.props.id !== roleId
     );
     
     if (isDuplicate) {

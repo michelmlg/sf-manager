@@ -1,7 +1,7 @@
 import { IMediaRepository } from '@domain/repositories/IMediaRepository';
 import { IAnimalMediaRepository } from '@domain/repositories/IAnimalMediaRepository';
 import { MediaProps } from '@domain/entities/Media';
-import { AnimalMediaProps } from '@domain/repositories/IAnimalMediaRepository';
+import { AnimalMediaProps } from '@domain/entities/AnimalMedia';
 
 interface UploadAnimalMediaInput {
   petId: string;

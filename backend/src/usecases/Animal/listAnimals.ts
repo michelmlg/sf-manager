@@ -6,7 +6,7 @@ export function listAnimals(
   animalRepo: IAnimalRepository,
   session?: { token?: string }
 ) {
-  return async (pagination: PaginationOptions) => {
+  return async (pagination: PaginationOptions = { page: 1, pageSize: 20}) => {
     // Garante que a estrutura de filtros exista
     const paginationCopy: PaginationOptions = {
       ...pagination,
@@ -34,7 +34,7 @@ export function listAnimals(
 
     // Aplica filtro de disponibilidade apenas se o usuário for público
     if (onlyAvailable) {
-      paginationCopy.filters.fieldFilters.status = 'Disponível';
+      paginationCopy.filters!.fieldFilters.status = 'Disponível';
     }
 
     return await animalRepo.findPaginated(paginationCopy);

@@ -5,7 +5,7 @@ export function createRole(roleRepository: IRoleRepository) {
 
   return async (name:string, description: string) => {
     const existingRoles = await roleRepository.list();
-    const exists = existingRoles.some(r => r.props.name === name);
+    const exists = existingRoles.some((r: any) => r.props.name === name);
   
      if (exists) {
       throw new Error('Cargo já existe');
