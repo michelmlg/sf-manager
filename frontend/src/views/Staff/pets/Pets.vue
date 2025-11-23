@@ -4,6 +4,7 @@ import { Search, Plus, Edit, Trash2, Eye } from 'lucide-vue-next';
 import PetModal from '@/views/Staff/pets/components/PetModal.vue';
 import CreateAnimalModal from '@/views/Staff/pets/components/CreateAnimalModal.vue';
 import Pagination from '@/components/Pagination.vue';
+import BaseButton from '@/components/BaseButton.vue'
 
 const selectedAnimal = ref(null);
 const isViewModalOpen = ref(false); // modal de visualização
@@ -189,12 +190,22 @@ onMounted(() => {
         <h1 class="text-3xl font-heading text-ong-text">Animais em Adoção</h1>
         <p class="text-muted-foreground mt-2">Gerencie todos os animais disponíveis para adoção</p>
       </div>
-      <button
+
+      <!-- <button
         @click="handleOpenAddModal"
         class="flex items-center gap-2 px-4 py-2 bg-ong-primary text-white rounded-lg shadow hover:bg-ong-accent transition"
       >
         <Plus class="w-4 h-4" /> Adicionar Animal
-      </button>
+      </button> -->
+
+      <BaseButton
+        variant="primary"
+        size="md"
+        :icon="Plus"
+        text="Adicionar Animal"
+        @click="handleOpenAddModal"
+      />
+
     </div>
 
     <Pagination
@@ -300,8 +311,23 @@ onMounted(() => {
             <td class="p-3 text-muted-foreground">{{ formatDate(animal.entryDate) }}</td>
             <td class="p-3 text-right">
               <div class="flex justify-end gap-2">
-                <button @click="handleViewAnimal(animal)" class="p-1 hover:text-ong-primary"><Eye class="w-4 h-4" /></button>
-                <button class="p-1 hover:text-red-600"><Trash2 class="w-4 h-4" /></button>
+                <!-- <button @click="handleViewAnimal(animal)" class="p-1 hover:text-ong-primary"><Eye class="w-4 h-4" /></button> 
+                <button class="p-1 hover:text-red-600"><Trash2 class="w-4 h-4" /></button>  -->
+
+                <BaseButton
+                  :icon="Eye"
+                  variant="default"
+                  size="sm"
+                  @click="handleViewAnimal(animal)"
+                />
+
+                <!-- <BaseButton
+                  :icon="Trash2"
+                  variant="danger"
+                  size="sm"
+                /> -->
+
+
               </div>
             </td>
           </tr>

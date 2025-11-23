@@ -76,26 +76,31 @@
             <td class="px-4 py-3">{{ request.reviewedAt ? formatarData(request.reviewedAt) : "-" }}</td>
             <td class="px-4 py-3 text-center">
               <div class="flex justify-center gap-2">
-                <button 
-                  @click="openViewModal(request)" 
-                  class="text-sm px-3 py-1 border rounded-md text-ong-primary hover:bg-ong-primary/10"
-                >
-                  <Eye class="w-3 h-3" />
-                </button>
-                <button 
+              <!-- Visualizar -->
+                <BaseButton
+                  :icon="Eye"
+                  variant="default"
+                  size="sm"
+                  @click="openViewModal(request)"
+                />
+
+                <!-- Revisar (aparecer se pendente) -->
+                <BaseButton
                   v-if="request.status === 'pending'"
-                  @click="openReviewModal(request)" 
-                  class="text-sm px-3 py-1 border rounded-md text-ong-accent hover:bg-ong-accent/10"
-                >
-                  <CheckCircle class="w-3 h-3" />
-                </button>
-                <button 
+                  :icon="CheckCircle"
+                  variant="primary"
+                  size="sm"
+                  @click="openReviewModal(request)"
+                />
+
+                <!-- Remover (aparece se aprovado/rejeitado) -->
+                <BaseButton
                   v-if="request.status === 'approved' || request.status === 'rejected'"
-                  @click="removeRequest(request)" 
-                  class="text-sm px-3 py-1 border rounded-md text-red-600 hover:bg-red-50"
-                >
-                  <Trash2 class="w-3 h-3" />
-                </button>
+                  :icon="Trash2"
+                  variant="danger"
+                  size="sm"
+                  @click="removeRequest(request)"
+                />
               </div>
             </td>
           </tr>
@@ -258,6 +263,7 @@ import {
 
 import { formatarData } from '@/utils/format/index.js';
 import { showToast } from '@/utils/uiAlerts/toast';
+import BaseButton from '@/components/BaseButton.vue'
 
 const searchTerm = ref('');
 const adoptionRequests = ref([]);

@@ -40,24 +40,17 @@
       <table class="w-full table-auto text-sm">
         <thead class="text-muted-foreground bg-ong-popover uppercase text-xs">
           <tr>
+            <th class="px-4 py-3 text-left">Status</th>
             <th class="px-4 py-3 text-left">Nome</th>
             <th class="px-4 py-3 text-left">Email</th>
             <th class="px-4 py-3 text-left">Assunto</th>
             <th class="px-4 py-3 text-left">Mensagem</th>
             <th class="px-4 py-3 text-left">Data</th>
-            <th class="px-4 py-3 text-left">Status</th>
             <th class="px-4 py-3 text-center">Ações</th>
           </tr>
         </thead>
         <tbody class="text-card-foreground">
           <tr v-for="msg in items" :key="msg.id" class="border-t hover:bg-gray-50 transition-colors">
-            <td class="px-4 py-3">{{ msg.name }}</td>
-            <td class="px-4 py-3">{{ msg.email }}</td>
-            <td class="px-4 py-3">{{ msg.subject }}</td>
-            <td class="px-4 py-3">
-              <span class="block max-w-[360px] truncate">{{ msg.message }}</span>
-            </td>
-            <td class="px-4 py-3">{{ formatarData(msg.createdAt) }}</td>
             <td class="px-4 py-3">
               <span
                 :class="['px-2 py-0.5 text-xs rounded-full font-semibold',
@@ -65,13 +58,39 @@
                 {{ msg.read ? 'Lido' : 'Não lido' }}
               </span>
             </td>
+            <td class="px-4 py-3">{{ msg.name }}</td>
+            <td class="px-4 py-3">{{ msg.email }}</td>
+            <td class="px-4 py-3">{{ msg.subject }}</td>
+            <td class="px-4 py-3">
+              <span class="block max-w-[360px] truncate">{{ msg.message }}</span>
+            </td>
+            <td class="px-4 py-3">{{ formatarData(msg.createdAt) }}</td>
             <td class="px-4 py-3 text-center">
               <div class="flex justify-center gap-2">
-                <button @click="openView(msg)" class="text-sm px-3 py-1 border rounded-md text-ong-primary hover:bg-ong-primary/10">Visualizar</button>
-                <button @click="toggleRead(msg)" class="text-sm px-3 py-1 border rounded-md text-gray-700 hover:bg-gray-100">
-                  {{ msg.read ? 'Marcar não lido' : 'Marcar lido' }}
-                </button>
-                <button @click="removeMessage(msg)" class="text-sm px-3 py-1 border rounded-md text-red-600 hover:bg-red-50">Excluir</button>
+               
+                <!-- VISUALIZAR -->
+                <BaseButton
+                  :icon="Eye"
+                  size="sm"
+                  variant="default"
+                  :onClick="() => openView(msg)"
+                />
+
+                <!-- MARCAR LIDO / NÃO LIDO -->
+                <BaseButton
+                  :text="msg.read ? 'Marcar não lido' : 'Marcar lido'"
+                  size="sm"
+                  variant="secondary"
+                  :onClick="() => toggleRead(msg)"
+                />
+
+                <!-- EXCLUIR -->
+                <BaseButton
+                  :icon="Trash2"
+                  size="sm"
+                  variant="danger"
+                  :onClick="() => removeMessage(msg)"
+                />
               </div>
             </td>
           </tr>
@@ -100,6 +119,8 @@
 import { ref, onMounted, watch } from 'vue'
 import Pagination from '@/components/Pagination.vue'
 import { formatarData } from '@/utils/format/index.js'
+import BaseButton from '@/components/BaseButton.vue'
+import { Eye, Trash2 } from 'lucide-vue-next';
 
 const items = ref([]);
 const total = ref(0);

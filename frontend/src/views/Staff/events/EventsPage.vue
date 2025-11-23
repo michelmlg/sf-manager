@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { Search, Plus, Edit, Trash2 } from 'lucide-vue-next';
 import Pagination from '@/components/Pagination.vue';
+import BaseButton from '@/components/BaseButton.vue';
 import { showToast } from '@/utils/uiAlerts/toast';
 
 const events = ref([]);
@@ -166,12 +167,13 @@ async function deleteEvent(id) {
         <h1 class="text-3xl font-heading text-ong-text">Eventos</h1>
         <p class="text-muted-foreground mt-2">Gerencie os eventos da ONG</p>
       </div>
-      <button
-        @click="openCreateModal"
-        class="flex items-center gap-2 px-4 py-2 bg-ong-primary text-white rounded-lg shadow hover:bg-ong-accent transition"
-      >
-        <Plus class="w-4 h-4" /> Adicionar Evento
-      </button>
+      <BaseButton
+        :icon="Plus"
+        variant="primary"
+        size="md"
+        text="Adicionar Evento"
+        :onClick="openCreateModal"
+      />
     </div>
 
     <Pagination
@@ -220,8 +222,20 @@ async function deleteEvent(id) {
             <td class="p-3 text-muted-foreground">{{ new Date(event.end_at).toLocaleString('pt-BR') }}</td>
             <td class="p-3 text-right">
               <div class="flex justify-end gap-2">
-                <button @click="startEdit(event)" class="p-1 hover:text-yellow-600"><Edit class="w-4 h-4" /></button>
-                <button @click="deleteEvent(event.id)" class="p-1 hover:text-red-600"><Trash2 class="w-4 h-4" /></button>
+                 <!-- Edit -->
+                  <BaseButton
+                    :icon="Edit"
+                    variant="default"
+                    size="sm"
+                    :onClick="() => startEdit(event)"
+                  />
+                  <!-- Delete -->
+                  <BaseButton
+                    :icon="Trash2"
+                    variant="danger"
+                    size="sm"
+                    :onClick="() => deleteEvent(event.id)"
+                  />
               </div>
             </td>
           </tr>
