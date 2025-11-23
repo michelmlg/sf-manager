@@ -54,6 +54,11 @@ const router = createRouter({
                     path:'/formulario-de-adocao/:animalId?',
                     name:'formulario-de-adocao',
                     component: () => import('../views/Landing/form/Form.vue')
+                },
+                {
+                    path:'/doar',
+                    name:'doar',
+                    component: () => import('../views/Landing/donate/DonatePage.vue')
                 }
             ]
         },

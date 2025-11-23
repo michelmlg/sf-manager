@@ -16,10 +16,12 @@
             na vida de diversos animais, promovendo a saúde e prosperidade.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
-            <button class="btn-primary group">
-              Faça a Diferença
-              <ArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-            </button>
+            <router-link to="/doar">
+              <button class="btn-primary group">
+                Doar agora
+                <ArrowRight class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </router-link>
             <button class="btn-secondary">
               Conheça Nossos Projetos
             </button>
