@@ -30,7 +30,14 @@ function goToAdoptionForm() {
   if (animal.value) router.push(`/formulario-de-adocao/${animal.value.id}`)
 }
 
-onMounted(fetchAnimal)
+onMounted(fetchAnimal);
+
+onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
 </script>
 
 <template>

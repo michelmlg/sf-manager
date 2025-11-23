@@ -9,6 +9,15 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import EventsCalendar from '@/views/Landing/eventos/components/EventsCalendar.vue';
 import EventsHighlight from '@/views/Landing/eventos/components/EventsHighlight.vue';
+
+onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
+
 </script>

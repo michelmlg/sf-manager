@@ -52,23 +52,25 @@
             <div class="flex items-center space-x-3">
               <MapPin class="w-5 h-5 text-ong-primary flex-shrink-0" />
               <span class="text-white/80">
-                Rua da Esperança, 123<br />
-                São Paulo, SP
+                R. Umari, 26 - Balneario Cidade Atlantica<br />
+                Guarujá, SP
               </span>
             </div>
             <div class="flex items-center space-x-3">
               <Phone class="w-5 h-5 text-ong-primary flex-shrink-0" />
-              <span class="text-white/80">(11) 9999-9999</span>
+              <span class="text-white/80">(13) 99781-7001</span>
             </div>
-            <div class="flex items-center space-x-3">
+            <!-- <div class="flex items-center space-x-3">
               <Mail class="w-5 h-5 text-ong-primary flex-shrink-0" />
               <span class="text-white/80">contato@ongsf.org.br</span>
-            </div>
+            </div> -->
           </div>
           <div class="mt-6">
-            <button class="btn-primary w-full">
-              Seja um Voluntário
-            </button>
+            <router-link :to="{ name: 'contato' }">
+              <button class="btn-primary w-full">
+                Seja um Voluntário
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -76,7 +78,7 @@
       <!-- Rodapé inferior -->
       <div class="border-t border-white/20 mt-12 pt-8 text-center">
         <p class="text-white/60">
-          © 2024 ONG São Francisco. Todos os direitos reservados. 
+          © {{ new Date().getFullYear() }} ONG São Francisco. Todos os direitos reservados. 
           <span class="mx-2">•</span>
           Feito com 💝 por quem ama os animais.
         </p>

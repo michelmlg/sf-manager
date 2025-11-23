@@ -60,7 +60,7 @@ async function login() {
     const data = await response.json();
 
 
-    router.push('/staff');
+    router.push('/staff/pet');
   } catch (error) {
     errorMessage.value = 'Erro ao conectar com o servidor';
   } finally {
@@ -75,7 +75,7 @@ onMounted(() => {
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Você saiu com sucesso!',
+        title: 'Deslogado!',
         showConfirmButton: false,
         timer: 1000,
         timerProgressBar: true,

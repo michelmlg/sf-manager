@@ -16,8 +16,8 @@ const props = defineProps({
   animal: Object
 });
 const emit = defineEmits(['close', 'update']);
-const tabs = ['Visão Geral', 'Pedidos de Adoção', 'Vacinas', 'Fatos', 'Mídias'];
-const activeTab = ref('Visão Geral');
+const tabs = ['Pedidos de Adoção', 'Vacinas', 'Fatos', 'Mídias']; // 'Visão Geral',
+const activeTab = ref('Pedidos de Adoção');
 const isEditing = ref(false);
 const editableAnimal = reactive({});
 const hasChanged = ref(false);
@@ -403,10 +403,9 @@ async function fetchBreeds(speciesId) {
 
         <!-- Conteúdo -->
         <div class="flex-1 overflow-y-auto p-6 space-y-6">
-          <div v-if="activeTab === 'Visão Geral'" class="space-y-6">Fatos
-            ...
-          </div>
-          <div v-else-if="activeTab === 'Mídias'">
+          <!-- <div v-if="activeTab === 'Visão Geral'" class="space-y-6">
+          </div> -->
+          <div v-if="activeTab === 'Mídias'">
             <PetMediaTab :pet-id="animal.id" />
           </div>
           <div v-else-if="activeTab === 'Vacinas'"> 

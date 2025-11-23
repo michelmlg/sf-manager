@@ -11,10 +11,12 @@
     <div class="flex flex-col h-full">
       <!-- Header -->
       <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-        <div class="flex items-center gap-2">
-          <img class="w-10 h-10"src="../../../../public/images/logo.png" alt="">
-          <h1 class="text-xl font-heading font-bold text-ong-text">SF Manager</h1>
-        </div>
+        <RouterLink to="/">
+          <div class="flex items-center gap-2">
+            <img class="w-10 h-10"src="../../../../public/images/logo.png" alt="">
+            <h1 class="text-xl font-heading font-bold text-ong-text">SF Manager</h1>
+          </div>
+        </RouterLink>
 
         <!-- Botão fechar (mobile) -->
         <!-- <button class="lg:hidden" @click="$emit('close')">

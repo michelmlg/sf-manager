@@ -94,6 +94,13 @@ watch(
 )
 
 onMounted(fetchAnimals)
+
+onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
 </script>
 
 <template>

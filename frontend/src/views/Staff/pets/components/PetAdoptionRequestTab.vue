@@ -7,13 +7,15 @@ import {
   XCircle,
   Clock,
   Ban,
-  Check
+  Check,
+  Trash2
 } from 'lucide-vue-next';
 
 import Pagination from '@/components/Pagination.vue';
 import BaseButton from '@/components/BaseButton.vue';
 import { formatarData } from '@/utils/format/index.js';
 import { showToast } from '@/utils/uiAlerts/toast';
+import { showConfirm } from '@/utils/uiAlerts/confirm';
 
 const props = defineProps({ petId: String });
 
@@ -68,6 +70,57 @@ function getStatusText(status) {
       return 'Rejeitado';
     default:
       return 'Desconhecido';
+  }
+}
+
+async function removeRequest(request) {
+  const confirmed = await showConfirm({ text: `Tem certeza que deseja remover o pedido de adoção de ${request.responsibleName}?\n\nEsta ação não pode ser desfeita.` });
+  // const confirmed = confirm(`Tem certeza que deseja remover o pedido de adoção de ${request.responsibleName}?\n\nEsta ação não pode ser desfeita.`);
+  
+  if (!confirmed) {
+    return;
+  }
+  
+  try {
+    console.log('Removendo pedido:', request.id);
+    
+    const response = await fetch(`/api/adoption-request/${request.id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    console.log('Resposta da remoção:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log('Erro na remoção:', errorData);
+      throw new Error(errorData.error || 'Erro ao remover pedido');
+    }
+
+    const result = await response.json();
+    console.log('Remoção bem-sucedida:', result);
+    
+    // Remove from the local list
+    const index = requests.value.findIndex(r => r.id === request.id);
+    if (index !== -1) {
+      requests.value.splice(index, 1);
+    }
+
+    showToast({
+      icon: 'success',
+      title: 'Pedido removido!',
+      description: result.message || 'O pedido foi removido com sucesso.',
+      timer: 4000,
+    });
+
+  } catch (error) {
+    console.error('Erro ao remover pedido:', error);
+    showToast({
+      icon: 'error',
+      title: 'Erro ao remover',
+      description: error.message || 'Não foi possível remover o pedido.',
+      timer: 4000,
+    });
   }
 }
 
@@ -217,6 +270,14 @@ watch([page, pageSize, search], fetchRequests);
                   size="sm"
                   title="Revisar"
                   @click="openReviewModal(req)"
+                />
+
+                <BaseButton
+                  v-if="req.status === 'approved' || req.status === 'rejected'"
+                  :icon="Trash2"
+                  variant="danger"
+                  size="sm"
+                  @click="removeRequest(req)"
                 />
               </div>
             </td>
