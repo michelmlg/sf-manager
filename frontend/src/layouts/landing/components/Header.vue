@@ -3,13 +3,15 @@
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <!-- Logo -->
-        <div class="flex items-center space-x-2">
-          <!-- <div class="w-10 h-10 bg-ong-primary rounded-full flex items-center justify-center">
-            <Heart class="w-6 h-6 text-white" />
-          </div> -->
-          <img class="w-10 h-10"src="../../../../public/images/logo.png" alt="">
-          <h4 class="text-2xl font-heading text-ong-text ">ONG São Francisco</h4>
-        </div>
+        <RouterLink to="/">
+          <div class="flex items-center space-x-2">
+            <!-- <div class="w-10 h-10 bg-ong-primary rounded-full flex items-center justify-center">
+              <Heart class="w-6 h-6 text-white" />
+            </div> -->
+            <img class="w-10 h-10"src="../../../../public/images/logo.png" alt="">
+            <h4 class="text-2xl font-heading text-ong-text ">ONG São Francisco</h4>
+          </div>
+        </RouterLink>
 
         <!-- Navegação Desktop -->
         <nav class="hidden md:flex space-x-8">
@@ -25,7 +27,7 @@
 
         <!-- Botões CTA (Desktop) -->
         <div class="hidden md:flex space-x-4">
-          <RouterLink to="/animals" class="btn-primary">Adotar agora</RouterLink>
+          <RouterLink to="/animals" class="btn-primary font-white">Adotar agora</RouterLink>
         </div>
 
         <div class="hidden md:flex">
@@ -49,7 +51,7 @@
           <RouterLink
             v-for="item in navItems"
             :key="item.name"
-            :to="item.route"
+            :to="'/' + item.route"
             class="text-ong-text hover:text-ong-primary transition-colors duration-300 font-medium py-2"
           >
             {{ item.name }}
@@ -72,12 +74,13 @@ import { RouterLink } from 'vue-router'
 const isMenuOpen = ref(false)
 
 const navItems = [
-  { name: 'Home', route: '/' },
+  // { name: 'Home', route: '/' },
   { name: 'O que Fazemos', route: 'o-que-fazemos' },
   { name: 'Nossa História', route: 'nossa-historia' },
   { name: 'Contato', route: 'contato' },
   { name: 'Eventos', route: 'eventos' },
-  { name: 'Parcerias', route: 'parcerias' }
+  { name: 'Parcerias', route: 'parcerias' },
+  { name: 'Doar', route: 'doar' }
 ]
 
 </script>
