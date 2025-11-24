@@ -10,7 +10,7 @@ import { deleteAnimalVaccine } from '@usecases/AnimalVaccine/deleteAnimalVaccine
 const repo = new SequelizeAnimalVaccineRepository();
 
 export class AnimalVaccineController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { petId } = req.params;
       const { vaccineId, applicationDate, applicator } = req.body;
@@ -63,7 +63,7 @@ export class AnimalVaccineController {
     }
   }
 
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const vaccine = await getAnimalVaccineById(repo)(id);
@@ -78,7 +78,7 @@ export class AnimalVaccineController {
     }
   }
 
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const data = req.body;
@@ -95,7 +95,7 @@ export class AnimalVaccineController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
 

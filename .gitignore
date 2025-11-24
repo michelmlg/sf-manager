@@ -2,4 +2,8 @@
 node_modules
 docs
 README.md
+<<<<<<< HEAD
 dist
+=======
+*/dist/*
+>>>>>>> 1d463b3ddcbaa804cffa335a031301a6f99a2e0d

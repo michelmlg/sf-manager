@@ -15,7 +15,7 @@ router.get('/permissions', requireAuth(authServiceSingleton), UserController.lis
 router.get('/session', requireAuth(authServiceSingleton), (req, res) => {
   res.json({ user: req.user });
 });
-router.put('/change-password', requireAuth(authServiceSingleton), UserController.changePassword);
+router.put('/change-password', requireAuth(authServiceSingleton), UserController.changeUserPassword);
 
 router.put('/:id/admin-change-password', hasPermissions(['user.change_password'], authServiceSingleton, userRepositorySingleton), UserController.adminChangePassword);
 

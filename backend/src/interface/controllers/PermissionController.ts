@@ -7,7 +7,7 @@ import { SequelizePermissionRepository } from '@infra/sequelize/repositories/Seq
 const permissionRepo = new SequelizePermissionRepository();
 
 export class PermissionController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { name, description } = req.body;
 
@@ -23,7 +23,7 @@ export class PermissionController {
     }
   }
 
-  static async list(req: Request, res: Response) {
+  static async list(req: Request, res: Response):Promise<any> {
     try {
       const permissions = await listPermissions(permissionRepo)();
       if (permissions.length === 0) {
@@ -36,7 +36,7 @@ export class PermissionController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.body;
 

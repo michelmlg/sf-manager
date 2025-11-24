@@ -9,7 +9,7 @@ import { deleteMedia } from '@usecases/Media/deleteMedia';
 const mediaRepo = new SequelizeMediaRepository();
 
 export class MediaController {
-  static async upload(req: Request, res: Response) {
+  static async upload(req: Request, res: Response):Promise<any> {
     try {
       if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });
@@ -26,7 +26,7 @@ export class MediaController {
     }
   }
 
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const media = await getMediaById(mediaRepo)(id, req.session);
@@ -42,7 +42,7 @@ export class MediaController {
     }
   }
 
-  static async list(req: Request, res: Response) {
+  static async list(req: Request, res: Response):Promise<any> {
   try {
     const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
     const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string, 10) : 10;
@@ -74,7 +74,7 @@ export class MediaController {
 
 
 
-  static async update(req: Request, res: Response) {
+  static async update(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const data = req.body;
@@ -85,7 +85,7 @@ export class MediaController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       await deleteMedia(mediaRepo)(id);
@@ -95,7 +95,7 @@ export class MediaController {
     }
   }
 
-  static async view(req: Request, res: Response) {
+  static async view(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const media = await getMediaById(mediaRepo)(id, req.session);
@@ -106,7 +106,7 @@ export class MediaController {
     }
   }
 
-  static async download(req: Request, res: Response) {
+  static async download(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
 

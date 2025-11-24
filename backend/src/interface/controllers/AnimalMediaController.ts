@@ -8,7 +8,7 @@ const mediaRepo = new SequelizeMediaRepository();
 const animalMediaRepo = new SequelizeAnimalMediaRepository();
 
 export class AnimalMediaController {
-  static async upload(req: Request, res: Response) {
+  static async upload(req: Request, res: Response):Promise<any> {
     try {
       if (!req.file) {
         return res.status(400).json({ error: 'No file uploaded' });

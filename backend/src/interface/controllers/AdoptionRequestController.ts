@@ -11,7 +11,7 @@ const adoptionRequestRepo = new SequelizeAdoptionRequestRepository();
 const animalRepo = new SequelizeAnimalRepository();
 
 export class AdoptionRequestController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response):Promise<any> {
     try {
       const { responsibleName, contactPhone, animalId, termsAccepted } = req.body;
 
@@ -46,34 +46,49 @@ export class AdoptionRequestController {
 
   static async list(req: Request, res: Response) {
     try {
-      const { status, animalId } = req.query;
+      const { status, animalId, page, pageSize } = req.query;
 
-      const adoptionRequests = await listAdoptionRequests(adoptionRequestRepo)
-      ({
-        status: status as string,
-        animalId: animalId as string
+      const result = await listAdoptionRequests(adoptionRequestRepo)({
+        status: status as string | undefined,
+        animalId: animalId as string | undefined,
+        page: page ? Number(page) : undefined,
+        pageSize: pageSize ? Number(pageSize) : undefined,
       });
 
-      const formattedRequests = adoptionRequests.map(request => ({
-        id: request.props.id,
-        responsibleName: request.props.responsibleName,
-        contactPhone: request.props.contactPhone,
-        animalId: request.props.animalId,
-        status: request.props.status,
-        submittedAt: request.props.submittedAt,
-        reviewedAt: request.props.reviewedAt,
-        reviewedBy: request.props.reviewedBy,
-        notes: request.props.notes,
-        animal: request.props.animal
+      const items = 'items' in result ? result.items : result;
+
+      const formatted = items.map((item: any) => ({
+        id: item.props?.id || item.id,
+        responsibleName: item.props?.responsibleName || item.responsibleName,
+        contactPhone: item.props?.contactPhone || item.contactPhone,
+        animalId: item.props?.animalId || item.animalId,
+        status: item.props?.status || item.status,
+        submittedAt: item.props?.submittedAt || item.submittedAt,
+        reviewedAt: item.props?.reviewedAt || item.reviewedAt,
+        reviewedBy: item.props?.reviewedBy || item.reviewedBy,
+        notes: item.props?.notes || item.notes,
+        animal: item.props?.animal || item.animal,
       }));
 
-      res.json(formattedRequests);
+      if ('items' in result) {
+      res.json({
+        items: formatted,
+        total: result.total,
+        page: result.page,
+        pageSize: result.pageSize,
+        totalPages: result.totalPages,
+        hasNext: result.hasNext,
+        hasPrevious: result.hasPrevious,
+      });
+      } else {
+        res.json(formatted);
+      }
     } catch (err: any) {
       res.status(500).json({ error: err.message });
     }
   }
 
-  static async getById(req: Request, res: Response) {
+  static async getById(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const adoptionRequest = await adoptionRequestRepo.findById(id);
@@ -99,7 +114,7 @@ export class AdoptionRequestController {
     }
   }
 
-  static async getByPetId(req: Request, res: Response) {
+  static async getByPetId(req: Request, res: Response):Promise<any> {
     try {
       
       // Paginação e ordenação
@@ -140,7 +155,7 @@ export class AdoptionRequestController {
     }
   }
 
-  static async review(req: Request, res: Response) {
+  static async review(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
       const { action, notes } = req.body;
@@ -177,7 +192,7 @@ export class AdoptionRequestController {
     }
   }
 
-  static async delete(req: Request, res: Response) {
+  static async delete(req: Request, res: Response):Promise<any> {
     try {
       const { id } = req.params;
 
