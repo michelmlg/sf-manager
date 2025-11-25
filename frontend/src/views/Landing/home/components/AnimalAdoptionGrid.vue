@@ -15,6 +15,8 @@ const page = ref(1);
 const pageSize = ref(6);
 
 const animals = ref([]);
+const availableCount = ref(0);
+const adoptedCount = ref(0);
 
 async function fetchAnimals() {
   const filters = {};
@@ -42,6 +44,46 @@ async function fetchAnimals() {
 
 }
 
+async function fetchAvailableCount() {
+  try {
+    const status = 'Disponível';
+    const params = new URLSearchParams({ status: status });
+    const url = `/api/animal/count?${params.toString()}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      // opcional: tratar 404/500 de forma diferente
+      console.warn('Falha ao buscar contagem de animais:', res.status);
+      availableCount.value = 0;
+      return;
+    }
+    const data = await res.json();
+    // espera { status: 'Disponível', count: 17 }
+    availableCount.value = typeof data.count === 'number' ? data.count : 0;
+  } catch (err) {
+    console.error('Erro em fetchAvailableCount:', err);
+    availableCount.value = 0;
+  }
+}
+
+async function fetchAdoptedCount() {
+  try {
+    const status = 'Adotado';
+    const params = new URLSearchParams({ status });
+    const url = `/api/animal/count?${params.toString()}`;
+    const res = await fetch(url);
+    if (!res.ok) {
+      console.warn('Falha ao buscar contagem de animais adotados:', res.status);
+      adoptedCount.value = 0;
+      return;
+    }
+    const data = await res.json();
+    adoptedCount.value = typeof data.count === 'number' ? data.count : 0;
+  } catch (err) {
+    console.error('Erro em fetchAdoptedCount:', err);
+    adoptedCount.value = 0;
+  }
+}
+
 const displayedAnimals = computed(() => showAll.value ? animals.value : animals.value.slice(0, 3))
 
 // function toggleFavorite(animalId) {
@@ -67,6 +109,8 @@ function goToAdoptionForm(animalId) {
 
 onMounted(() => {
   fetchAnimals();
+  fetchAvailableCount();
+  fetchAdoptedCount();
 });
 
 
@@ -125,12 +169,12 @@ onMounted(() => {
       <div class="mt-16 text-center">
         <div class="inline-flex items-center gap-6 bg-white px-8 py-4 rounded-2xl shadow-lg">
           <div class="text-center">
-            <div class="text-2xl font-heading text-ong-primary mb-1">{{ animals.length }}</div>
+            <div class="text-2xl font-heading text-ong-primary mb-1">{{ availableCount }}</div>
             <div class="text-sm text-ong-text/70">Animais Disponíveis</div>
           </div>
           <div class="w-px h-12 bg-ong-text/20"></div>
           <div class="text-center">
-            <div class="text-2xl font-heading text-ong-primary mb-1">847</div>
+            <div class="text-2xl font-heading text-ong-primary mb-1">{{ adoptedCount }}</div>
             <div class="text-sm text-ong-text/70">Adoções Realizadas</div>
           </div>
         </div>

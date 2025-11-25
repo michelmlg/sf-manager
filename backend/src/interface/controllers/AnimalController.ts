@@ -137,4 +137,22 @@ export class AnimalController {
       return;
     }
   }
+
+  static async countByStatus(req: Request, res: Response): Promise<any> {
+    try {
+      const status = (req.query.status as string) || null;
+      console.log(status);
+
+      if (!status) {
+        return res.status(400).json({ error: "O status é obrigatório." });
+      }
+
+      const count = await animalRepo.countAnimalsByStatus(status);
+
+      return res.status(200).json({ status, count });
+    } catch (err: any) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
 } 

@@ -115,4 +115,12 @@ export class SequelizeAnimalRepository implements IAnimalRepository {
     };
   }
 
+  async countAnimalsByStatus(status: string): Promise<number> {
+    const count = await AnimalModel.count({
+      where: { status }
+    });
+
+    return count;
+  }
+
 }
