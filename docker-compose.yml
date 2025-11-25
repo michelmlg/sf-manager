@@ -13,6 +13,9 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      #- traefik_network
+      - network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -24,6 +27,17 @@ services:
     environment:
       PMA_HOST: ${PMA_HOST}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      #- traefik_network
+      - network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`sf-manager.duckdns.org`) && PathPrefix(`/phpmyadmin`)"
+      - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
+      - "traefik.http.routers.phpmyadmin.tls=true"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=duckdns"
+     # - "traefik.http.services.phpmyadmin.loadbalancer.server.port=9090"
 
   backend:
     build: ./backend
@@ -34,10 +48,10 @@ services:
       sh -c "
         if [ \"$NODE_ENV\" = 'production' ]; then
           echo 'Modo produção: instalando dependências e compilando...' &&
-          npm ci &&                                   
-          npm run build &&                              
+          npm ci &&
+          npm run build &&
           echo 'Build concluído. Iniciando servidor...' &&
-          exec node dist/main.js;                       
+          exec node dist/main.js;
         else
           npm install &&
           npm run dev;
@@ -45,15 +59,27 @@ services:
       "
     volumes:
       - ./backend:/srv/app
-    ports:
-      - "3000:3000"
     depends_on:
       - mysql
+    ports:
+      - "3000:3000"
     env_file:
       - .env
+    networks:
+      #- traefik_network
+      - network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`seu.dominio`) && PathPrefix(`/api`)"
+      - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls=true"
+      - "traefik.http.routers.api.tls.certresolver=resolver"
+      - "traefik.http.services.api.loadbalancer.server.port=3000"
 
   vue-web:
     container_name: frontend_container
+    restart: always
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -73,18 +99,29 @@ services:
     volumes:
       - ./frontend:/srv/app
     ports:
-      - "80:5173"
+      - "5173:5173"
     environment:
       - NODE_ENV=development
     init: true
     stop_grace_period: 1s
+    # networks:
+    #   - network
     networks:
+      #- traefik_network
       - network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.front.rule=Host(`seu.dominio`)"
+      - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.front.entrypoints=websecure"
+      - "traefik.http.routers.front.tls=true"
+      - "traefik.http.routers.front.tls.certresolver=resolver"
 
 volumes:
   mysql_data:
 
 networks:
+  #traefik_network:
+  #  external: true
   network:
     driver: bridge
-
