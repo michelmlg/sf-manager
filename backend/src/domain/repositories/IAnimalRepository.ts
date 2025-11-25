@@ -9,5 +9,5 @@ export interface IAnimalRepository {
   delete(id: string): Promise<boolean>;
   markAsAdopted(id: string): Promise<boolean>;
   findPaginated(pagination: PaginationOptions): Promise<PaginatedResult<Animal>>;
-
+  countAnimalsByStatus(status: string): Promise<number>;
 }
