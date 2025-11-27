@@ -126,44 +126,57 @@ onMounted(() => {
           Cada um tem sua personalidade única e muito amor para dar.
         </p>
       </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        <AnimalCard
-          v-for="animal in displayedAnimals"
-          :key="animal.id"
-          :animal="animal"
-          size="large"
-        />
-      </div>
-
-      <!-- <div class="text-center">
-        <button @click="showAll = !showAll" class="inline-flex items-center gap-2 btn-secondary">
-          <span v-if="showAll">Ver Menos <ChevronUp size="20" /></span>
-          <span v-else>Ver Todos os Animais <ChevronDown size="20" /></span>
-        </button>
-      </div> -->
-
-      <div class="text-center">
-      <template v-if="!showAll && animals.length > 3">
-        <!-- Estado fechado -->
-        <button @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
-          Ver Mais <ChevronDown size="20" />
-        </button>
-      </template>
-
-      <template v-else>
-        <!-- Estado aberto parcial -->
-        <div class="flex justify-center gap-4">
-          <button v-if="animals.length > 3" @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
-            Ver Menos <ChevronUp size="20" />
-          </button>
-
-          <router-link to="/animals" class="inline-flex items-center gap-2 btn-primary">
-            Ver Todos Animais
-          </router-link>
+      <section v-if="displayedAnimals.length > 0">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <AnimalCard
+            v-for="animal in displayedAnimals"
+            :key="animal.id"
+            :animal="animal"
+            size="large"
+          />
         </div>
-      </template>
-    </div>
+  
+        <!-- <div class="text-center">
+          <button @click="showAll = !showAll" class="inline-flex items-center gap-2 btn-secondary">
+            <span v-if="showAll">Ver Menos <ChevronUp size="20" /></span>
+            <span v-else>Ver Todos os Animais <ChevronDown size="20" /></span>
+          </button>
+        </div> -->
+  
+        <div class="text-center">
+          <template v-if="!showAll && animals.length > 3">
+            <!-- Estado fechado -->
+            <button @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
+              Ver Mais <ChevronDown size="20" />
+            </button>
+          </template>
+  
+          <template v-else>
+            <!-- Estado aberto parcial -->
+            <div class="flex justify-center gap-4">
+              <button v-if="animals.length > 3" @click="toggleShowAll" class="inline-flex items-center gap-2 btn-secondary">
+                Ver Menos <ChevronUp size="20" />
+              </button>
+    
+              <router-link to="/animals" class="inline-flex items-center gap-2 btn-primary">
+                Ver Todos Animais
+              </router-link>
+            </div>
+          </template>
+        </div>
+
+      </section>
+      <section v-else class="text-center py-5">
+        <div class="bg-white shadow-lg px-10 py-6 rounded-2xl inline-block">
+          <h3 class="text-2xl font-heading text-ong-primary mb-4">
+            Nenhum animal disponível no momento
+          </h3>
+          <p class="text-ong-text/70 max-w-md mx-auto">
+            No momento não temos animais disponíveis para adoção, mas em breve novos amiguinhos poderão aparecer por aqui.
+            Continue acompanhando!
+          </p>
+        </div>
+      </section>
 
 
       <div class="mt-16 text-center">
