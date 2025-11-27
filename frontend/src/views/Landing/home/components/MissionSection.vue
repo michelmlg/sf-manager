@@ -25,14 +25,14 @@
             {{ program.description }}
           </p>
           <div class="flex items-center justify-between">
-            <span class="text-ong-primary font-heading text-lg">
+            <!-- <span class="text-ong-primary font-heading text-lg">
               {{ program.stats }}
-            </span>
-            <button
+            </span> -->
+            <!-- <button
               class="text-ong-primary hover:text-ong-accent transition-colors duration-300 font-medium"
             >
               Ver mais →
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
