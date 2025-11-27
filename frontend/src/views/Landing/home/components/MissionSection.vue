@@ -46,12 +46,16 @@
             para centenas de animais. Junte-se a nós nessa missão de amor!
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button class="bg-white text-ong-primary px-8 py-4 rounded-lg font-medium hover:bg-gray-50 transition-colors duration-300">
-              Adote um Animal
-            </button>
-            <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white hover:text-ong-primary transition-colors duration-300">
-              Apoiar com Doação
-            </button>
+              <RouterLink to="/animals">
+                <button class="bg-white text-ong-primary px-8 py-4 rounded-lg font-medium hover:bg-gray-50 transition-colors duration-300">
+                  Adote um Animal
+                </button>
+              </RouterLink>
+              <RouterLink to="/doar">
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg font-medium hover:bg-white hover:text-ong-primary transition-colors duration-300">
+                  Apoiar com Doação
+                </button>
+              </RouterLink>
           </div>
         </div>
       </div>
