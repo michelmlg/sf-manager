@@ -75,12 +75,11 @@ const isMenuOpen = ref(false)
 
 const navItems = [
   // { name: 'Home', route: '/' },
+  { name: 'Doações', route: 'doar' },
+  { name: 'Eventos', route: 'eventos' },
   { name: 'O que Fazemos', route: 'o-que-fazemos' },
   { name: 'Nossa História', route: 'nossa-historia' },
-  { name: 'Contato', route: 'contato' },
-  { name: 'Eventos', route: 'eventos' },
-  { name: 'Parcerias', route: 'parcerias' },
-  { name: 'Doar', route: 'doar' }
+  { name: 'Contato', route: 'contato' }
 ]
 
 </script>
