@@ -1,6 +1,6 @@
 <template>
   <section class="bg-ong-background text-ong-text min-h-screen">
-    <div class="container py-12 space-y-16">
+    <div class="container py-12 space-y-16 animate-fade-in">
       <MissionSection />
       <CarouselSection />
       <ActivitiesSection />

@@ -1,5 +1,5 @@
 <template>
-  <div class="animate-fade-in space-y-4">
+  <div class="space-y-4">
     <h2 class="text-3xl font-heading font-bold">Nossa Missão</h2>
     <p class="leading-relaxed">
       Bem-vindo à <strong>ONG São Francisco</strong>! Somos uma organização dedicada a transformar a vida de animais em situação de vulnerabilidade, oferecendo resgate, cuidado e adoção responsável.
