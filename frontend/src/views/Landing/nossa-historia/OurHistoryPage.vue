@@ -14,7 +14,7 @@
         Somos uma entidade completamente independente, sem nenhum vínculo com instituições governamentais.
         Nossa manutenção e o bem-estar dos nossos animais são garantidos graças ao apoio fundamental de parceiros como
         <a href="https://www.petz.com.br" target="_blank" class="text-ong-primary underline hover:text-ong-accent">Petz</a>,
-        Cahu e diversos veterinários locais, que nos fornecem desde medicamentos essenciais até rações de qualidade.
+        Kahu e diversos veterinários locais, que nos fornecem desde medicamentos essenciais até rações de qualidade.
         Essa rede de solidariedade nos permite continuar nossa missão de transformar vidas.
       </p>
     </div>
@@ -31,5 +31,13 @@
 </template>
 
 <script setup>
-// Nenhum script necessário por enquanto
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+})
+
 </script>

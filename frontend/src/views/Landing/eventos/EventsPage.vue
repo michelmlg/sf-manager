@@ -1,7 +1,7 @@
 <template>
-    <div class="container mx-auto px-4 py-8">
+    <div class="container py-12 mx-auto px-4 animate-fade-in">
         <div class="text-start mb-8">
-            <h1 class="text-ong-text mb-4">Eventos</h1>
+            <h2 class="text-ong-text mb-4">Eventos</h2>
         </div>
         <EventsHighlight class="mb-8"></EventsHighlight>
         <EventsCalendar />

@@ -10,6 +10,8 @@ services:
       - .env
     ports:
       - "${MYSQL_PORT}:3306"
+    networks:
+      - network
     volumes:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -104,8 +106,6 @@ services:
       - NODE_ENV=development
     init: true
     stop_grace_period: 1s
-    # networks:
-    #   - network
     networks:
       #- traefik_network
       - network

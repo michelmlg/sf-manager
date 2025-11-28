@@ -46,11 +46,6 @@ const router = createRouter({
                     component: () => import('../views/Landing/eventos/EventsPage.vue')
                 },
                 {
-                    path:'/parcerias',
-                    name:'parcerias',
-                    component: () => import('../views/Landing/parcerias/PartnersPage.vue')
-                },
-                {
                     path:'/formulario-de-adocao/:animalId?',
                     name:'formulario-de-adocao',
                     component: () => import('../views/Landing/form/Form.vue')

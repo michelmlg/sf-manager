@@ -8,7 +8,7 @@
             <!-- <div class="w-10 h-10 bg-ong-primary rounded-full flex items-center justify-center">
               <Heart class="w-6 h-6 text-white" />
             </div> -->
-            <img class="w-10 h-10"src="../../../../public/images/logo.png" alt="">
+            <img class="w-10 h-10"src="/images/logo.png" alt="">
             <h4 class="text-2xl font-heading text-ong-text ">ONG São Francisco</h4>
           </div>
         </RouterLink>
@@ -75,12 +75,11 @@ const isMenuOpen = ref(false)
 
 const navItems = [
   // { name: 'Home', route: '/' },
+  { name: 'Doações', route: 'doar' },
+  { name: 'Eventos', route: 'eventos' },
   { name: 'O que Fazemos', route: 'o-que-fazemos' },
   { name: 'Nossa História', route: 'nossa-historia' },
-  { name: 'Contato', route: 'contato' },
-  { name: 'Eventos', route: 'eventos' },
-  { name: 'Parcerias', route: 'parcerias' },
-  { name: 'Doar', route: 'doar' }
+  { name: 'Contato', route: 'contato' }
 ]
 
 </script>
