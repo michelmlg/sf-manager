@@ -100,52 +100,52 @@ const emit = defineEmits(['click'])
 const defaultPartners = [
     { 
         name: 'Ponto Cão',     
-        image: '../../../../../public/images/partners/Ponto cão.jpg',        
+        image: '/images/partners/Ponto cão.jpg',        
         url: ''
     },
     { 
         name: 'Kahu PetShop',     
-        image: '../../../../../public/images/partners/Kahu-petshop.webp',        
+        image: '/images/partners/Kahu-petshop.webp',        
         url: ''
     },
     { 
         name: 'Petz',     
-        image: '../../../../../public/images/partners/petz.png',        
+        image: '/images/partners/petz.png',        
         url: ''
     },
     { 
         name: 'Upvet',     
-        image: '../../../../../public/images/partners/upvet.jpg',        
+        image: '/images/partners/upvet.jpg',        
         url: ''
     },
     { 
         name: 'Petland',     
-        image: '../../../../../public/images/partners/petland.png',        
+        image: '/images/partners/petland.png',        
         url: ''
     },
     { 
         name: 'PetConfort',     
-        image: '../../../../../public/images/partners/petConfort.jpg',        
+        image: '/images/partners/petConfort.jpg',        
         url: ''
     },
     { 
         name: 'Oh My Dog!',     
-        image: '../../../../../public/images/partners/Oh My Dog!.jpg',        
+        image: '/images/partners/Oh My Dog!.jpg',        
         url: ''
     },
     { 
         name: 'Nelvet',     
-        image: '../../../../../public/images/partners/Nelvet.jpg',        
+        image: '/images/partners/Nelvet.jpg',        
         url: ''
     },
     { 
         name: 'GoldenPet',     
-        image: '../../../../../public/images/partners/Golden-pet.webp',        
+        image: '/images/partners/Golden-pet.webp',        
         url: ''
     },
     { 
         name: 'Centro Medico Veterinario Dr. Julio Cesar',     
-        image: '../../../../../public/images/partners/Centro-Dr-Julio-Cesar.jpg',        
+        image: '/images/partners/Centro-Dr-Julio-Cesar.jpg',        
         url: ''
     },
 

@@ -32,7 +32,7 @@
                 <div class="w-64 h-64 bg-white rounded-xl flex items-center justify-center shadow-md">
                 <template v-if="qrImageUrl">
                     <img
-                        src="../../../../public/images/QR-payment.jpg"
+                        src="/images/QR-payment.jpg"
                         alt="QR Code para doação (PIX)"
                         class="object-contain w-full h-full"
                         @error="onImgError"
@@ -161,7 +161,7 @@ import { ref, onMounted } from 'vue';
 import { ArrowLeft, Heart, QrCode, Share2, Copy, Sparkles } from 'lucide-vue-next';
 import { showToast } from '@/utils/uiAlerts/toast';
 
-const qrImageUrl = ref("../../../../public/images/QR-payment.jpg");
+const qrImageUrl = ref("/images/QR-payment.jpg");
 
 onMounted(() => {
   window.scrollTo({
