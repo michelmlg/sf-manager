@@ -4,6 +4,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { Key, Shield, Settings, Users, Edit, Trash2, Plus, Search } from 'lucide-vue-next';
 import BaseButton from '@/components/BaseButton.vue';
 import { showConfirm } from '@/utils/uiAlerts/confirm.js';
+import { verifyPermission } from '@/composables';
 
 
 /* ──────────────── STATE ──────────────── */
@@ -19,6 +20,7 @@ const formValues = reactive({ name: '', description: '' });
 const formErrors = reactive({ name: '', description: '' });
 
 const filters = reactive({ search: '', roleType: 'all', permissionCount: 'all' });
+const hasPermission = verifyPermission();
 
 /* ──────────────── UTILS ──────────────── */
 function togglePermission(id) {
@@ -180,7 +182,7 @@ onMounted(() => {
         <h1 class="text-3xl font-bold text-ong-text">Cargos & Permissões</h1>
         <p class="text-muted-foreground mt-2">Gerencie os cargos do sistema</p>
       </div>
-      <BaseButton :icon="Plus" text="Novo Cargo" @click="openRoleDialog" variant="primary" />
+      <BaseButton v-if="hasPermission('role.create')" :icon="Plus" text="Novo Cargo" @click="openRoleDialog" variant="primary" />
     </div>
 
     <div class="mb-6">
@@ -195,7 +197,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="overflow-x-auto bg-card rounded-lg shadow-sm">
+    <div v-if="hasPermission('role.get')" class="overflow-x-auto bg-card rounded-lg shadow-sm">
       <table class="w-full table-auto text-sm">
         <thead class="text-muted-foreground bg-ong-popover uppercase text-xs">
           <tr>
@@ -218,13 +220,20 @@ onMounted(() => {
               <span v-if="role.permissions.length <= 0" class="text-xs text-gray-500">Nenhuma permissão associada</span>
             </td>
             <td class="p-3 flex gap-2">
-              <BaseButton :icon="Key" @click="openPermissionDialog(role)" variant="default" />
-              <BaseButton :icon="Edit" @click="handleEditRole(role)" variant="warning" />
-              <BaseButton :icon="Trash2" @click="deleteRole(role)" variant="danger" />
+              <BaseButton v-if="hasPermission('role.update_permissions')" :icon="Key" @click="openPermissionDialog(role)" variant="default" />
+              <BaseButton v-if="hasPermission('role.create')" :icon="Edit" @click="handleEditRole(role)" variant="warning" />
+              <BaseButton v-if="hasPermission('role.delete')" :icon="Trash2" @click="deleteRole(role)" variant="danger" />
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div v-else>
+       <div
+          class="text-muted-foreground text-sm px-4 py-2 rounded-lg shadow-md border border-gray-200 max-w-sm text-center"
+        >
+          Você não tem permissão para visualizar os cargos.
+        </div>
     </div>
 
     <!-- Modal de Permissões -->

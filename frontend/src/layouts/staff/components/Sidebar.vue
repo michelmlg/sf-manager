@@ -87,8 +87,8 @@ const fullNavigation = [
   { name: 'Contatos', href: '/staff/contacts', icon: MessageSquare },
   // { name: 'Formulários', href: '/staff/forms', icon: FileText },
   { name: 'Mídia', href: '/staff/media', icon: FolderDown  },
-  { name: 'Usuários', href: '/staff/user', icon: Users },
-  { name: 'Cargos & Permissões', href: '/staff/role', icon: Shield },
+  { name: 'Usuários', href: '/staff/user', icon: Users, permission: 'user.get' },
+  { name: 'Cargos & Permissões', href: '/staff/role', icon: Shield, permission: 'role.get' },
   // { name: 'Configurações', href: '/staff/settings', icon: Settings },
 ];
 
