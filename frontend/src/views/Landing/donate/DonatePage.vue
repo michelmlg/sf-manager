@@ -130,8 +130,35 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
 import { Heart, QrCode, Share2, Copy, Sparkles } from 'lucide-vue-next'
 import { showToast } from '@/utils/uiAlerts/toast'
+
+useHead({
+  title: 'Doe — ONG São Francisco',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Ajude a ONG São Francisco a resgatar, tratar e proteger animais. Doe via PIX de forma segura e transparente.'
+    },
+    { name: 'robots', content: 'index,follow' },
+
+    // Open Graph
+    { property: 'og:title', content: 'Doe — ONG São Francisco' },
+    {
+      property: 'og:description',
+      content:
+        'Ajude a ONG São Francisco a resgatar, tratar e proteger animais. Doe via PIX de forma segura e transparente.'
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: 'https://ongsfrancisco.com.br/doar' },
+
+    // Twitter
+    { name: 'twitter:card', content: 'summary_large_image' }
+  ],
+  link: [{ rel: 'canonical', href: 'https://ongsfrancisco.com.br/doar' }]
+})
 
 onMounted(() => {
   window.scrollTo({ top: 0, behavior: 'smooth' })

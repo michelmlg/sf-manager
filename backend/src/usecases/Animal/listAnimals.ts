@@ -28,7 +28,7 @@ export function listAnimals(
         onlyAvailable = false;
       } catch (error) {
         console.error('Erro ao validar token:', error);
-        throw new Error('Token inválido ou expirado');
+        //throw new Error('Token inválido ou expirado');
       }
     }
 

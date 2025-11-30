@@ -121,7 +121,7 @@ router.beforeEach(async (to, from, next) => {
   const session = useSessionStore();
 
   // Verifica se a sessão já foi carregada, se não, carrega
-  if (!session.isLoggedIn) {
+  if (!session.isLoggedIn && to.meta.requiresAuth) {
     await session.fetchSession();
   }
 

@@ -83,7 +83,17 @@
 
 <script setup>
 import { reactive, onMounted } from 'vue'
+import { useHead } from '@unhead/vue'
 
+useHead({
+  title: 'Contato | ONG São Francisco',
+  meta: [
+    {
+      name: 'description',
+      content: 'Entre em contato com a ONG São Francisco. Envie sua mensagem, dúvidas ou sugestões pelo formulário de contato.'
+    }
+  ]
+})
 
 onMounted(() => {
   window.scrollTo({

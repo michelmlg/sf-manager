@@ -3,3 +3,5 @@ FROM node:22-alpine3.20
 WORKDIR /srv/app
 
 COPY . .
+
+EXPOSE 3000
