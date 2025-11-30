@@ -28,7 +28,6 @@
             <li><router-link to="/o-que-fazemos" class="text-white/80 hover:text-ong-primary transition-colors">O que fazemos</router-link></li>
             <li><router-link to="/nossa-historia" class="text-white/80 hover:text-ong-primary transition-colors">Nossa História</router-link></li>
             <li><router-link to="/eventos" class="text-white/80 hover:text-ong-primary transition-colors">Eventos</router-link></li>
-            <li><router-link to="/parcerias" class="text-white/80 hover:text-ong-primary transition-colors">Parcerias</router-link></li>
             <li><router-link to="/contato" class="text-white/80 hover:text-ong-primary transition-colors">Contato</router-link></li>
           </ul>
         </div>
@@ -41,7 +40,6 @@
             <li><a href="#" class="text-white/80 hover:text-ong-primary transition-colors">Castração</a></li>
             <li><a href="#" class="text-white/80 hover:text-ong-primary transition-colors">Reabilitação</a></li>
             <li><a href="#" class="text-white/80 hover:text-ong-primary transition-colors">Lar Temporário</a></li>
-            <li><a href="#" class="text-white/80 hover:text-ong-primary transition-colors">Educação</a></li>
           </ul>
         </div>
 
