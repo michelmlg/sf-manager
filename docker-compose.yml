@@ -10,8 +10,6 @@ services:
       - .env
     ports:
       - "${MYSQL_PORT}:3306"
-    networks:
-      - network
     volumes:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
