@@ -1,11 +1,38 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRouter } from 'vue-router'
 import Pagination from '@/components/Pagination.vue'
 import AnimalCard from '@/views/Landing/animals/components/AnimalCard.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
 const router = useRouter()
+
+useHead({
+  title: 'Animais para Adoção — ONG São Francisco',
+  meta: [
+    {
+      name: 'description',
+      content:
+        'Conheça nossos amigos especiais que estão esperando por uma família. Adote, apoie e transforme vidas com a ONG São Francisco.'
+    },
+    { name: 'robots', content: 'index,follow' },
+
+    // Open Graph
+    { property: 'og:title', content: 'Animais para Adoção — ONG São Francisco' },
+    {
+      property: 'og:description',
+      content:
+        'Conheça nossos amigos especiais que estão esperando por uma família. Adote, apoie e transforme vidas com a ONG São Francisco.'
+    },
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: 'https://ongsfrancisco.com.br/animais' },
+
+    // Twitter
+    { name: 'twitter:card', content: 'summary_large_image' }
+  ],
+  link: [{ rel: 'canonical', href: 'https://ongsfrancisco.com.br/animais' }]
+})
 
 // Estado
 const animals = ref([])

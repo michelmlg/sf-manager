@@ -32,6 +32,43 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import { useHead } from '@vueuse/head'
+
+useHead({
+  title: "Nossa História — ONG São Francisco",
+  meta: [
+    {
+      name: "description",
+      content:
+        "Conheça a história da ONG São Francisco, fundada por protetores independentes dedicados ao resgate, cuidado e proteção de animais em situação de rua."
+    },
+    { name: "robots", content: "index,follow" },
+
+    // Open Graph
+    { property: "og:title", content: "Nossa História — ONG São Francisco" },
+    {
+      property: "og:description",
+      content:
+        "A trajetória da ONG São Francisco: como nasceu, quem fundou e como se tornou uma referência no cuidado e resgate de animais."
+    },
+    { property: "og:type", content: "article" },
+    {
+      property: "og:url",
+      content: "https://ongsfrancisco.com.br/nossa-historia"
+    },
+    {
+      property: "og:image",
+      content: "https://ongsfrancisco.com.br/default-historia.jpg"
+    },
+
+  ],
+  link: [
+    {
+      rel: "canonical",
+      href: "https://ongsfrancisco.com.br/nossa-historia"
+    }
+  ]
+})
 
 onMounted(() => {
   window.scrollTo({

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@vueuse/head'
 import { VenusAndMars, Heart, CalendarFold } from 'lucide-vue-next'
 import PetMediaCarousel from '@/views/Staff/pets/components/PetMediaCarousel.vue'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
@@ -10,6 +11,48 @@ const router = useRouter()
 
 const animal = ref(null)
 const loading = ref(true)
+
+// useHead reativo: chamado no setup e "observa" animal.value
+useHead(() => {
+  const name = animal.value?.name ?? 'Animal para adoção'
+  const breed = animal.value?.breed?.name ?? ''
+  const species = animal.value?.species?.name ?? ''
+  const notes = animal.value?.notes ?? ''
+  const description =
+    notes.slice(0, 160) ||
+    `Conheça ${name}, um ${species.toLowerCase() || 'animal'} disponível para adoção.`
+
+  const image =
+    animal.value?.medias?.[0]?.url
+      ? animal.value.medias[0].url.startsWith('http')
+        ? animal.value.medias[0].url
+        : `https://ongsfrancisco.com.br${animal.value.medias[0].url}`
+      : 'https://ongsfrancisco.com.br/default-animal.jpg'
+
+  const id = route.params.petId
+
+  return {
+    title: loading.value ? 'Carregando animal...' : `${name} — Para Adoção | ONG São Francisco`,
+    meta: [
+      { name: 'description', content: description },
+      { name: 'robots', content: 'index,follow' },
+
+      // Open Graph
+      { property: 'og:title', content: `${name} — Para Adoção` },
+      { property: 'og:description', content: description },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:url', content: `https://ongsfrancisco.com.br/animal/${id}` },
+      { property: 'og:image', content: image },
+
+      // Twitter
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:image', content: image }
+    ],
+    link: [
+      { rel: 'canonical', href: `https://ongsfrancisco.com.br/animal/${id}` }
+    ]
+  }
+})
 
 async function fetchAnimal() {
   loading.value = true
@@ -30,15 +73,13 @@ function goToAdoptionForm() {
   if (animal.value) router.push(`/formulario-de-adocao/${animal.value.id}`)
 }
 
-onMounted(fetchAnimal);
+onMounted(fetchAnimal)
 
 onMounted(() => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 })
 </script>
+
 
 <template>
   <section class="min-h-screen bg-gradient-to-br from-ong-background to-white py-12 mr-8 ml-8">

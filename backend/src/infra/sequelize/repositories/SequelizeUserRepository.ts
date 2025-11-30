@@ -103,7 +103,7 @@ export class SequelizeUserRepository implements IUserRepository {
             const plain = u.toJSON() as any;
             return new User({
                 ...plain,
-                role: plain.role?.name || undefined,
+                role: plain.role || undefined,
             });
         });
     }
